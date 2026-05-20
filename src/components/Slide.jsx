@@ -23,7 +23,9 @@ export default function Slide({
   const footerMuted = isWine ? 'text-cream/50' : 'text-wine/50'
 
   return (
-    <div className={`relative ${bgMain}`} style={{ width: 1280, height: 720 }}>
+    <div className={`relative overflow-hidden ${bgMain}`} style={{ width: 1280, height: 720 }}>
+      {/* Textura sutil de papel */}
+      <div className={`paper-grain ${isWine ? 'wine' : ''}`} aria-hidden />
       {/* Sidebar direita */}
       <div
         className={`absolute top-0 right-0 h-full flex flex-col items-center justify-between py-6 border-l ${sidebarBg}`}

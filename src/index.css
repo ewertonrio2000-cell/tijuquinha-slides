@@ -80,5 +80,50 @@ html, body, #root {
 }
 .sketch-fill { fill: #6E1F26; }
 
+/* Textura de papel — ruído sutil sobre o fundo creme */
+.paper-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  background-image:
+    radial-gradient(rgba(110, 31, 38, 0.07) 1px, transparent 1.2px),
+    radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1.2px);
+  background-size: 4px 4px, 7px 7px;
+  background-position: 0 0, 2px 3px;
+}
+.paper-grain.wine {
+  opacity: 0.25;
+  background-image:
+    radial-gradient(rgba(245, 239, 230, 0.12) 1px, transparent 1.2px),
+    radial-gradient(rgba(0, 0, 0, 0.18) 1px, transparent 1.2px);
+}
+
+/* Pincelada decorativa atrás do título */
+.brush-blob {
+  position: absolute;
+  inset: -8% -6%;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 50%, rgba(168, 95, 71, 0.85), rgba(168, 95, 71, 0) 70%),
+    radial-gradient(ellipse 60% 70% at 70% 40%, rgba(146, 70, 50, 0.6), rgba(146, 70, 50, 0) 70%);
+  filter: blur(0.5px);
+}
+
+/* "Fita" decorativa (washi tape) — usada em polaroids/notas */
+.tape {
+  position: absolute;
+  width: 60px;
+  height: 18px;
+  background: rgba(245, 239, 230, 0.85);
+  border: 1px dashed rgba(110, 31, 38, 0.25);
+  transform: translateX(-50%) rotate(-4deg);
+  top: -8px;
+  left: 50%;
+  z-index: 2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
 /* Garante que a fonte Bebas Neue tenha bom espacejamento */
 .tracking-display { letter-spacing: 0.04em; }
