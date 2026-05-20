@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import Slide from './components/Slide'
 import Toolbar from './components/Toolbar'
@@ -25,12 +26,12 @@ import Slide12Desenho from './slides/Slide12Desenho'
 import Slide13Corte from './slides/Slide13Corte'
 
 const SLIDES = [
-  { id: 'slide-00', label: '00', title: 'Capa', Component: Slide00Cover, hidePageNumber: true },
+  { id: 'slide-00', label: '00', title: 'Capa', Component: Slide00Cover, hidePageNumber: true, variant: 'wine' },
   { id: 'slide-01', label: '01', title: 'Proposta', Component: Slide01Proposta },
   { id: 'slide-01-1', label: '01.1', title: 'Diagnóstico', Component: Slide1_1Diagnostico },
   { id: 'slide-02', label: '02', title: 'Moodboard', Component: Slide02Moodboard },
   { id: 'slide-03', label: '03', title: 'Referências', Component: Slide03Referencias },
-  { id: 'slide-04', label: '04', title: 'Diretrizes × Programa', Component: Slide04Diretrizes },
+  { id: 'slide-04', label: '04', title: 'Diretrizes × Programa', Component: Slide04Diretrizes, variant: 'wine' },
   { id: 'slide-05', label: '05', title: 'Público-Alvo', Component: Slide05Publico },
   { id: 'slide-06', label: '06', title: 'Paisagismo', Component: Slide06Paisagismo },
   { id: 'slide-07', label: '07', title: 'Mobilidade', Component: Slide07Mobilidade },
@@ -72,9 +73,14 @@ export default function App() {
     return () => window.removeEventListener('resize', compute)
   }, [presentation])
 
+  const [direction, setDirection] = useState(0)
   const go = useCallback((i) => {
     setCurrent(Math.max(0, Math.min(total - 1, i)))
   }, [total])
+  const goWithDir = useCallback((nextIdx) => {
+    setDirection(nextIdx > current ? 1 : -1)
+    setCurrent(Math.max(0, Math.min(total - 1, nextIdx)))
+  }, [current, total])
 
   // Keyboard navigation
   useEffect(() => {
@@ -89,10 +95,10 @@ export default function App() {
 
       if (e.key === 'ArrowRight' || e.key === 'PageDown') {
         e.preventDefault()
-        go(current + 1)
+        goWithDir(current + 1)
       } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
         e.preventDefault()
-        go(current - 1)
+        goWithDir(current - 1)
       } else if (e.key === 'Escape' && presentation) {
         setPresentation(false)
       } else if (e.key === 'f' || e.key === 'F') {
@@ -101,7 +107,8 @@ export default function App() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [current, presentation, go])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, presentation])
 
   const handleResetSlide = async () => {
     if (!confirm('Resetar o conteúdo deste slide para o padrão? (Afeta também a versão online compartilhada.)')) return
@@ -134,7 +141,7 @@ export default function App() {
       for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i]
         const canvas = await html2canvas(node, {
-          backgroundColor: '#FAFAFA',
+          backgroundColor: '#F5EFE6',
           scale: 2,
           useCORS: true,
           logging: false,
@@ -157,7 +164,7 @@ export default function App() {
   const SlideComp = slide.Component
 
   return (
-    <div className={`min-h-screen w-full ${presentation ? 'presentation bg-black' : 'bg-neutral-900'}`}>
+    <div className={`min-h-screen w-full ${presentation ? 'presentation bg-black' : 'bg-[#1c1614]'}`}>
       <Toolbar
         presentationMode={presentation}
         onTogglePresentation={() => setPresentation((p) => !p)}
@@ -178,9 +185,8 @@ export default function App() {
           paddingBottom: presentation ? 0 : 84,
         }}
       >
-        <div
-          className="slide-fade origin-center shadow-2xl"
-          key={slide.id + '-' + current}
+        <motion.div
+          className="origin-center shadow-2xl"
           style={{
             width: 1280,
             height: 720,
@@ -188,14 +194,27 @@ export default function App() {
             transformOrigin: 'center center',
           }}
         >
-          <Slide
-            pageNumber={current + 1}
-            totalSlides={total}
-            hidePageNumber={slide.hidePageNumber}
-          >
-            <SlideComp slideId={slide.id} />
-          </Slide>
-        </div>
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={slide.id}
+              custom={direction}
+              initial={(d) => ({ opacity: 0, x: d > 0 ? 40 : -40 })}
+              animate={{ opacity: 1, x: 0 }}
+              exit={(d) => ({ opacity: 0, x: d > 0 ? -40 : 40 })}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              style={{ width: 1280, height: 720 }}
+            >
+              <Slide
+                pageNumber={current + 1}
+                totalSlides={total}
+                hidePageNumber={slide.hidePageNumber}
+                variant={slide.variant}
+              >
+                <SlideComp slideId={slide.id} />
+              </Slide>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       {/* Mobile warning */}
@@ -208,9 +227,9 @@ export default function App() {
           current={current}
           total={total}
           slides={SLIDES}
-          onSelect={go}
-          onPrev={() => go(current - 1)}
-          onNext={() => go(current + 1)}
+          onSelect={goWithDir}
+          onPrev={() => goWithDir(current - 1)}
+          onNext={() => goWithDir(current + 1)}
         />
       )}
 

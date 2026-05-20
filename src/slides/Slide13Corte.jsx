@@ -1,6 +1,8 @@
+import { motion } from 'framer-motion'
 import EditableText from '../components/EditableText'
 import ImageUpload from '../components/ImageUpload'
 import SlideTitle from '../components/SlideTitle'
+import SketchMark from '../components/SketchMark'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -19,7 +21,12 @@ export default function Slide13Corte({ slideId }) {
     <div className="w-full h-full p-12 flex flex-col gap-5">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
       <div className="grid grid-cols-12 gap-6 flex-1 min-h-0">
-        <div className="col-span-8 flex flex-col">
+        <motion.div
+          className="col-span-8 flex flex-col relative"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
           <ImageUpload
             value={d.image}
             onChange={(v) => set({ image: v })}
@@ -28,25 +35,51 @@ export default function Slide13Corte({ slideId }) {
             fit="contain"
             label="Corte via Streetmix"
           />
-        </div>
-        <div className="col-span-4 flex flex-col gap-4">
+          <SketchMark
+            type="circle"
+            className="absolute top-1/3 left-1/3"
+            delay={0.8}
+            size={180}
+          />
+          <motion.div
+            className="absolute top-[28%] left-[40%] font-hand text-wine text-xl rotate-[-3deg]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.0 }}
+          >
+            ciclovia segregada
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          className="col-span-4 flex flex-col gap-4"
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+        >
           <div>
-            <div className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-semibold">
+            <div className="text-[11px] uppercase tracking-[0.3em] text-wine mb-2 font-semibold">
               Descrição
             </div>
             <div className="text-[13px] text-muted leading-relaxed">
               <EditableText value={d.description} onChange={(v) => set({ description: v })} multiline />
             </div>
           </div>
-          <div className="border-t border-line pt-4">
-            <div className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-semibold">
+          <div className="border-t border-line pt-4 relative">
+            <div className="text-[11px] uppercase tracking-[0.3em] text-wine mb-2 font-semibold">
               Dimensões
             </div>
             <div className="text-[13px] text-ink leading-relaxed font-medium">
               <EditableText value={d.measurements} onChange={(v) => set({ measurements: v })} multiline />
             </div>
+            <SketchMark
+              type="underline"
+              className="absolute -bottom-1 left-0"
+              delay={0.9}
+              width={160}
+            />
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   )
