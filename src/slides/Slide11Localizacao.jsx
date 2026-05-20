@@ -1,5 +1,7 @@
+import { MapPin } from 'lucide-react'
+import { motion } from 'framer-motion'
 import EditableText from '../components/EditableText'
-import ImageUpload from '../components/ImageUpload'
+import Polaroid from '../components/Polaroid'
 import SlideTitle from '../components/SlideTitle'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
@@ -9,37 +11,69 @@ const defaults = {
   address: 'Estrada da Barra da Tijuca — Tijuquinha, Rio de Janeiro / RJ',
   caption: 'Trecho selecionado para a proposta, próximo à confluência com vias coletoras e ao corredor de ônibus.',
   mapImage: null,
-  photos: [null, null, null, null],
+  photos: [
+    { img: null, rot: -3, cap: 'esquina norte' },
+    { img: null, rot: 2, cap: 'calçada leste' },
+    { img: null, rot: -2, cap: 'ponto de ônibus' },
+    { img: null, rot: 3, cap: 'travessia' },
+  ],
 }
 
 export default function Slide11Localizacao({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
-  const setPhoto = (i, v) => set({ photos: d.photos.map((p, idx) => (idx === i ? v : p)) })
+  const setPhoto = (i, patch) =>
+    set({ photos: d.photos.map((p, idx) => (idx === i ? { ...p, ...patch } : p)) })
+
   return (
     <div className="w-full h-full p-12 flex flex-col gap-4">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
-      <div className="grid grid-cols-2 gap-6 flex-1 min-h-0">
+      <div className="grid grid-cols-2 gap-8 flex-1 min-h-0">
         {/* Mapa */}
-        <div className="flex flex-col gap-3">
-          <ImageUpload
+        <div className="flex flex-col gap-3 relative">
+          <Polaroid
             value={d.mapImage}
             onChange={(v) => set({ mapImage: v })}
-            className="w-full flex-1"
-            rounded="lg"
-            label="Print do Google Maps"
+            rotation={-2}
+            tape
+            width={500}
+            height={380}
+            delay={0.2}
           />
-          <div className="text-[12px] text-ink font-medium border-t border-line pt-2">
-            <EditableText value={d.address} onChange={(v) => set({ address: v })} />
-          </div>
-          <div className="text-[11px] text-muted leading-relaxed">
+          <motion.div
+            className="absolute right-3 top-3 text-wine"
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.7, type: 'spring' }}
+          >
+            <MapPin size={30} fill="#6E1F26" />
+          </motion.div>
+          <motion.div
+            className="mt-4 font-hand text-wine text-xl leading-tight"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <EditableText value={d.address} onChange={(v) => set({ address: v })} multiline />
+          </motion.div>
+          <div className="text-[12px] text-muted leading-relaxed">
             <EditableText value={d.caption} onChange={(v) => set({ caption: v })} multiline />
           </div>
         </div>
+
         {/* Grid de fotos */}
-        <div className="grid grid-cols-2 grid-rows-2 gap-3">
-          {d.photos.map((p, i) => (
-            <ImageUpload key={i} value={p} onChange={(v) => setPhoto(i, v)} className="w-full h-full" />
-          ))}
+        <div className="relative">
+          <div className="absolute" style={{ left: '5%', top: '0%' }}>
+            <Polaroid value={d.photos[0]?.img} onChange={(v) => setPhoto(0, { img: v })} rotation={d.photos[0]?.rot} caption={d.photos[0]?.cap} onCaptionChange={(v) => setPhoto(0, { cap: v })} width={170} height={150} delay={0.3} tape />
+          </div>
+          <div className="absolute" style={{ right: '5%', top: '8%' }}>
+            <Polaroid value={d.photos[1]?.img} onChange={(v) => setPhoto(1, { img: v })} rotation={d.photos[1]?.rot} caption={d.photos[1]?.cap} onCaptionChange={(v) => setPhoto(1, { cap: v })} width={170} height={150} delay={0.4} />
+          </div>
+          <div className="absolute" style={{ left: '10%', bottom: '5%' }}>
+            <Polaroid value={d.photos[2]?.img} onChange={(v) => setPhoto(2, { img: v })} rotation={d.photos[2]?.rot} caption={d.photos[2]?.cap} onCaptionChange={(v) => setPhoto(2, { cap: v })} width={170} height={150} delay={0.5} />
+          </div>
+          <div className="absolute" style={{ right: '8%', bottom: '0%' }}>
+            <Polaroid value={d.photos[3]?.img} onChange={(v) => setPhoto(3, { img: v })} rotation={d.photos[3]?.rot} caption={d.photos[3]?.cap} onCaptionChange={(v) => setPhoto(3, { cap: v })} width={170} height={150} delay={0.6} tape />
+          </div>
         </div>
       </div>
     </div>
