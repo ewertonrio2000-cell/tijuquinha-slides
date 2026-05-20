@@ -1,0 +1,53 @@
+import EditableText from '../components/EditableText'
+import ImageUpload from '../components/ImageUpload'
+import SlideTitle from '../components/SlideTitle'
+import { useSlideStorage } from '../hooks/useSlideStorage'
+
+const defaults = {
+  eyebrow: '13',
+  title: 'Corte da Rua',
+  description:
+    'O corte transversal demonstra a nova distribuição do espaço viário: calçadas de 3 m com piso tátil, faixa de arborização e mobiliário, ciclovia segregada de 2,5 m, faixa de rolamento reduzida e nova travessia elevada.',
+  measurements:
+    '• Calçada: 3,00 m\n• Faixa de arborização: 1,20 m\n• Ciclovia bidirecional: 2,50 m\n• Faixa de rolamento: 3,00 m por sentido\n• Ponto de ônibus: integrado à calçada',
+  image: null,
+}
+
+export default function Slide13Corte({ slideId }) {
+  const [d, set] = useSlideStorage(slideId, defaults)
+  return (
+    <div className="w-full h-full p-12 flex flex-col gap-5">
+      <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
+      <div className="grid grid-cols-12 gap-6 flex-1 min-h-0">
+        <div className="col-span-8 flex flex-col">
+          <ImageUpload
+            value={d.image}
+            onChange={(v) => set({ image: v })}
+            className="w-full h-full"
+            rounded="lg"
+            fit="contain"
+            label="Corte via Streetmix"
+          />
+        </div>
+        <div className="col-span-4 flex flex-col gap-4">
+          <div>
+            <div className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-semibold">
+              Descrição
+            </div>
+            <div className="text-[13px] text-muted leading-relaxed">
+              <EditableText value={d.description} onChange={(v) => set({ description: v })} multiline />
+            </div>
+          </div>
+          <div className="border-t border-line pt-4">
+            <div className="text-[11px] uppercase tracking-[0.25em] text-neutral-500 mb-2 font-semibold">
+              Dimensões
+            </div>
+            <div className="text-[13px] text-ink leading-relaxed font-medium">
+              <EditableText value={d.measurements} onChange={(v) => set({ measurements: v })} multiline />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
