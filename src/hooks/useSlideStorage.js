@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { SLIDES_TABLE, setSyncStatus, supabase, supabaseReady } from '../lib/supabase'
+import { toast } from '../lib/toast'
 
 const CACHE_PREFIX = 'tijuquinha:slide:'
 
@@ -107,7 +108,7 @@ export function useSlideStorage(slideId, defaults) {
       if (error) {
         console.error('[Supabase save]', error)
         setStatus('error'); setSyncStatus('error')
-        // se falhou, reabilita futura tentativa zerando o ref
+        toast(`Erro ao salvar: ${error.message}`, { kind: 'error', duration: 6000 })
         lastSavedJsonRef.current = null
         return
       }
@@ -168,6 +169,36 @@ export function useSlideStorage(slideId, defaults) {
   }, [slideId, defaults])
 
   return [data, update, reset, status]
+}
+
+/**
+ * Lê tudo do cache localStorage e empurra pro Supabase de uma vez.
+ * Retorna um relatório { ok, errors[] }.
+ */
+export async function flushAllToSupabase() {
+  if (!supabaseReady) {
+    return { ok: false, errors: ['Supabase não está configurado (env vars faltando).'] }
+  }
+  const entries = []
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key && key.startsWith(CACHE_PREFIX)) {
+      const slideId = key.slice(CACHE_PREFIX.length)
+      try {
+        const data = JSON.parse(localStorage.getItem(key))
+        entries.push({ id: slideId, data })
+      } catch {}
+    }
+  }
+  if (entries.length === 0) return { ok: true, errors: [], pushed: 0 }
+  const errors = []
+  for (const entry of entries) {
+    const { error } = await supabase
+      .from(SLIDES_TABLE)
+      .upsert(entry, { onConflict: 'id' })
+    if (error) errors.push(`${entry.id}: ${error.message}`)
+  }
+  return { ok: errors.length === 0, errors, pushed: entries.length - errors.length }
 }
 
 export async function resetAllSlides() {

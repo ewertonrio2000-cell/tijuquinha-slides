@@ -1,20 +1,26 @@
-import { Download, Maximize2, Minimize2, RotateCcw, Trash2, Cloud, CloudOff, Loader2 } from 'lucide-react'
+import { Download, Maximize2, Minimize2, RotateCcw, Trash2, Cloud, CloudOff, Loader2, Save, Settings } from 'lucide-react'
 
-function SyncIndicator({ status }) {
+function SyncIndicator({ status, onClick }) {
   if (!status) return null
   const map = {
     loading: { icon: <Loader2 size={12} className="animate-spin" />, text: 'Carregando…', cls: 'text-neutral-400' },
-    saving: { icon: <Loader2 size={12} className="animate-spin" />, text: 'Salvando…', cls: 'text-neutral-300' },
+    saving: { icon: <Loader2 size={12} className="animate-spin" />, text: 'Salvando…', cls: 'text-amber-300' },
     saved: { icon: <Cloud size={12} />, text: 'Sincronizado', cls: 'text-emerald-400' },
-    error: { icon: <CloudOff size={12} />, text: 'Erro ao sincronizar', cls: 'text-red-400' },
-    idle: { icon: <Cloud size={12} />, text: 'Online', cls: 'text-neutral-500' },
+    error: { icon: <CloudOff size={12} />, text: 'Erro de sync', cls: 'text-red-400' },
+    idle: { icon: <Cloud size={12} />, text: 'Online', cls: 'text-neutral-400' },
   }
   const m = map[status] || map.idle
   return (
-    <div className={`hidden md:flex items-center gap-1.5 text-[11px] ${m.cls}`}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`hidden md:flex items-center gap-1.5 text-[11px] ${m.cls} hover:bg-neutral-800 px-2 py-1 rounded transition`}
+      title="Abrir diagnóstico de conexão"
+    >
       {m.icon}
       <span>{m.text}</span>
-    </div>
+      <Settings size={11} className="opacity-50" />
+    </button>
   )
 }
 
@@ -26,6 +32,9 @@ export default function Toolbar({
   onResetAll,
   exporting,
   syncStatus,
+  onOpenDiagnostic,
+  onSaveNow,
+  saving,
 }) {
   if (presentationMode) {
     return (
@@ -45,13 +54,23 @@ export default function Toolbar({
         <div className="text-sm font-semibold tracking-tight">
           Ateliê de Urbanismo — Tijuquinha
         </div>
-        <div className="text-[11px] text-neutral-400 hidden md:block">
-          Edite os textos clicando neles · alterações são sincronizadas online
+        <div className="text-[11px] text-neutral-400 hidden lg:block">
+          Edite clicando · alterações sincronizam online
         </div>
-        <SyncIndicator status={syncStatus} />
+        <SyncIndicator status={syncStatus} onClick={onOpenDiagnostic} />
       </div>
 
       <div className="flex items-center gap-2">
+        <button
+          onClick={onSaveNow}
+          disabled={saving}
+          className="px-3 py-1.5 text-xs rounded-md bg-emerald-700 hover:bg-emerald-600 disabled:opacity-60 flex items-center gap-1.5 font-semibold"
+          title="Forçar sincronização agora (envia tudo do cache para o Supabase)"
+        >
+          {saving ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
+          <span>{saving ? 'Salvando…' : 'Salvar agora'}</span>
+        </button>
+        <div className="w-px h-5 bg-neutral-700 mx-1" />
         <button
           onClick={onResetSlide}
           className="px-3 py-1.5 text-xs rounded-md bg-neutral-800 hover:bg-neutral-700 flex items-center gap-1.5 border border-neutral-700"

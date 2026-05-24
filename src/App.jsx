@@ -6,8 +6,11 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Slide from './components/Slide'
 import Toolbar from './components/Toolbar'
 import SlideNavigation from './components/SlideNavigation'
-import { resetAllSlides } from './hooks/useSlideStorage'
-import { onSyncStatus } from './lib/supabase'
+import ToastContainer from './components/ToastContainer'
+import DiagnosticPanel from './components/DiagnosticPanel'
+import { resetAllSlides, flushAllToSupabase } from './hooks/useSlideStorage'
+import { onSyncStatus, supabaseReady } from './lib/supabase'
+import { toast } from './lib/toast'
 
 import Slide00Cover from './slides/Slide00Cover'
 import Slide01Proposta from './slides/Slide01Proposta'
@@ -49,8 +52,37 @@ export default function App() {
   const [exporting, setExporting] = useState(false)
   const [scale, setScale] = useState(1)
   const [syncStatus, setSyncStatusState] = useState('idle')
+  const [diagOpen, setDiagOpen] = useState(false)
+  const [savingNow, setSavingNow] = useState(false)
 
   useEffect(() => onSyncStatus(setSyncStatusState), [])
+
+  // Aviso inicial se env vars não estão configuradas no build
+  useEffect(() => {
+    if (!supabaseReady) {
+      toast(
+        'Sincronização offline — variáveis de ambiente do Supabase não foram embutidas neste build. Sua colega não vai ver suas alterações até que isso seja corrigido no Vercel.',
+        { kind: 'error', duration: 0 },
+      )
+    }
+  }, [])
+
+  const handleSaveNow = async () => {
+    setSavingNow(true)
+    try {
+      const result = await flushAllToSupabase()
+      if (result.ok) {
+        toast(`${result.pushed ?? 0} slides sincronizados com sucesso.`, { kind: 'success' })
+      } else {
+        toast(
+          `Sincronização parcial. ${result.errors.length} erro(s):\n${result.errors.slice(0, 3).join('\n')}`,
+          { kind: 'error', duration: 8000 },
+        )
+      }
+    } finally {
+      setSavingNow(false)
+    }
+  }
   const exportRef = useRef(null)
   const stageRef = useRef(null)
 
@@ -173,7 +205,13 @@ export default function App() {
         onResetAll={handleResetAll}
         exporting={exporting}
         syncStatus={syncStatus}
+        onOpenDiagnostic={() => setDiagOpen(true)}
+        onSaveNow={handleSaveNow}
+        saving={savingNow}
       />
+
+      <DiagnosticPanel open={diagOpen} onClose={() => setDiagOpen(false)} />
+      <ToastContainer />
 
       {/* Stage */}
       <div
