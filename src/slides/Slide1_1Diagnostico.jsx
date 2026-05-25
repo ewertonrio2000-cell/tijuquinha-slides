@@ -33,7 +33,7 @@ function StickyQuote({ value, onChange, rotation = -2, delay = 0 }) {
     >
       <span className="absolute -left-1 -top-1 font-display text-wine text-3xl leading-none">“</span>
       <div className="font-hand text-ink text-lg leading-snug pl-2">
-        <EditableText value={value} onChange={onChange} multiline />
+        <EditableText value={value} onChange={onChange} multiline  positionKey="el-1"/>
       </div>
     </motion.div>
   )
@@ -57,7 +57,7 @@ export default function Slide1_1Diagnostico({ slideId }) {
             Diagnóstico do Território
           </div>
           <div className="text-[13px] text-muted leading-relaxed">
-            <EditableText value={d.diagnostico} onChange={(v) => set({ diagnostico: v })} multiline />
+            <EditableText value={d.diagnostico} onChange={(v) => set({ diagnostico: v })} multiline  positionKey="diagnostico"/>
           </div>
 
           <div className="mt-5 space-y-3">
@@ -77,7 +77,7 @@ export default function Slide1_1Diagnostico({ slideId }) {
             Base Teórica
           </div>
           <div className="text-[13px] text-muted leading-relaxed">
-            <EditableText value={d.teoria} onChange={(v) => set({ teoria: v })} multiline />
+            <EditableText value={d.teoria} onChange={(v) => set({ teoria: v })} multiline  positionKey="teoria"/>
           </div>
         </motion.div>
 
@@ -93,7 +93,7 @@ export default function Slide1_1Diagnostico({ slideId }) {
               caption="estado atual"
               delay={0.3}
               zIndex={1}
-            />
+             positionKey="image1"/>
           </div>
           <div className="absolute" style={{ right: '0%', bottom: '5%' }}>
             <Polaroid
@@ -105,7 +105,7 @@ export default function Slide1_1Diagnostico({ slideId }) {
               caption="análise"
               delay={0.45}
               zIndex={2}
-            />
+             positionKey="image2"/>
           </div>
         </div>
       </div>

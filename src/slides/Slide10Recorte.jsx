@@ -58,14 +58,14 @@ export default function Slide10Recorte({ slideId }) {
           transition={{ delay: 0.3 }}
         >
           <div className="text-[13px] text-muted leading-relaxed">
-            <EditableText value={d.description} onChange={(v) => set({ description: v })} multiline />
+            <EditableText value={d.description} onChange={(v) => set({ description: v })} multiline  positionKey="description"/>
           </div>
           <div className="border-t border-line pt-3 space-y-1">
             <div className="font-hand text-wine text-2xl leading-tight">
-              <EditableText value={d.scale} onChange={(v) => set({ scale: v })} />
+              <EditableText value={d.scale} onChange={(v) => set({ scale: v })}  positionKey="scale"/>
             </div>
             <div className="text-[11px] uppercase tracking-[0.3em] text-wine font-semibold">
-              <EditableText value={d.detail} onChange={(v) => set({ detail: v })} multiline />
+              <EditableText value={d.detail} onChange={(v) => set({ detail: v })} multiline  positionKey="detail"/>
             </div>
           </div>
         </motion.div>

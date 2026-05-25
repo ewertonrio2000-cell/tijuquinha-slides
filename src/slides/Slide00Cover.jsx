@@ -34,9 +34,9 @@ export default function Slide00Cover({ slideId }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <EditableText value={d.university} onChange={(v) => set({ university: v })} />
+          <EditableText value={d.university} onChange={(v) => set({ university: v })}  positionKey="university"/>
           <div className="mt-1">
-            <EditableText value={d.course} onChange={(v) => set({ course: v })} />
+            <EditableText value={d.course} onChange={(v) => set({ course: v })}  positionKey="course"/>
           </div>
         </motion.div>
 
@@ -51,10 +51,10 @@ export default function Slide00Cover({ slideId }) {
             onChange={(v) => set({ title: v })}
             multiline
             className="font-display text-[9rem] leading-[0.85] uppercase text-cream"
-          />
+           positionKey="title"/>
           <div className="bg-cream mt-7" style={{ width: 96, height: 3 }} />
           <div className="mt-6 text-xl text-cream/80 max-w-md font-light">
-            <EditableText value={d.subtitle} onChange={(v) => set({ subtitle: v })} />
+            <EditableText value={d.subtitle} onChange={(v) => set({ subtitle: v })}  positionKey="subtitle"/>
           </div>
 
           {/* Anotação manuscrita decorativa */}
@@ -81,7 +81,7 @@ export default function Slide00Cover({ slideId }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <EditableText value={d.year} onChange={(v) => set({ year: v })} />
+          <EditableText value={d.year} onChange={(v) => set({ year: v })}  positionKey="year"/>
         </motion.div>
       </div>
 
@@ -115,7 +115,7 @@ export default function Slide00Cover({ slideId }) {
               value={d.professor}
               onChange={(v) => set({ professor: v })}
               className="normal-case tracking-normal text-[13px] text-cream/85"
-            />
+             positionKey="professor"/>
           </div>
           <div>
             <div className="font-semibold text-cream mb-2 tracking-[0.32em]">Alunos</div>
@@ -123,23 +123,23 @@ export default function Slide00Cover({ slideId }) {
               value={d.student1Name}
               onChange={(v) => set({ student1Name: v })}
               className="normal-case tracking-normal text-[13px] text-cream font-medium"
-            />
+             positionKey="student1Name"/>
             <EditableText
               value={d.student1Id}
               onChange={(v) => set({ student1Id: v })}
               className="normal-case tracking-normal text-[11px] text-cream/60"
-            />
+             positionKey="student1Id"/>
             <div className="mt-2">
               <EditableText
                 value={d.student2Name}
                 onChange={(v) => set({ student2Name: v })}
                 className="normal-case tracking-normal text-[13px] text-cream font-medium"
-              />
+               positionKey="student2Name"/>
               <EditableText
                 value={d.student2Id}
                 onChange={(v) => set({ student2Id: v })}
                 className="normal-case tracking-normal text-[11px] text-cream/60"
-              />
+               positionKey="student2Id"/>
             </div>
           </div>
         </motion.div>

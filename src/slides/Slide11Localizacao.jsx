@@ -58,26 +58,26 @@ export default function Slide11Localizacao({ slideId }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <EditableText value={d.address} onChange={(v) => set({ address: v })} multiline />
+            <EditableText value={d.address} onChange={(v) => set({ address: v })} multiline  positionKey="address"/>
           </motion.div>
           <div className="text-[12px] text-muted leading-relaxed">
-            <EditableText value={d.caption} onChange={(v) => set({ caption: v })} multiline />
+            <EditableText value={d.caption} onChange={(v) => set({ caption: v })} multiline  positionKey="caption"/>
           </div>
         </div>
 
         {/* Grid de fotos */}
         <div className="relative">
           <div className="absolute" style={{ left: '5%', top: '0%' }}>
-            <Polaroid value={d.photos[0]?.img} onChange={(v) => setPhoto(0, { img: v })} rotation={d.photos[0]?.rot} caption={d.photos[0]?.cap} onCaptionChange={(v) => setPhoto(0, { cap: v })} width={170} height={150} delay={0.3} tape />
+            <Polaroid value={d.photos[0]?.img} onChange={(v) => setPhoto(0, { img: v })} rotation={d.photos[0]?.rot} caption={d.photos[0]?.cap} onCaptionChange={(v) => setPhoto(0, { cap: v })} width={170} height={150} delay={0.3} tape  positionKey="el-4"/>
           </div>
           <div className="absolute" style={{ right: '5%', top: '8%' }}>
-            <Polaroid value={d.photos[1]?.img} onChange={(v) => setPhoto(1, { img: v })} rotation={d.photos[1]?.rot} caption={d.photos[1]?.cap} onCaptionChange={(v) => setPhoto(1, { cap: v })} width={170} height={150} delay={0.4} />
+            <Polaroid value={d.photos[1]?.img} onChange={(v) => setPhoto(1, { img: v })} rotation={d.photos[1]?.rot} caption={d.photos[1]?.cap} onCaptionChange={(v) => setPhoto(1, { cap: v })} width={170} height={150} delay={0.4}  positionKey="el-5"/>
           </div>
           <div className="absolute" style={{ left: '10%', bottom: '5%' }}>
-            <Polaroid value={d.photos[2]?.img} onChange={(v) => setPhoto(2, { img: v })} rotation={d.photos[2]?.rot} caption={d.photos[2]?.cap} onCaptionChange={(v) => setPhoto(2, { cap: v })} width={170} height={150} delay={0.5} />
+            <Polaroid value={d.photos[2]?.img} onChange={(v) => setPhoto(2, { img: v })} rotation={d.photos[2]?.rot} caption={d.photos[2]?.cap} onCaptionChange={(v) => setPhoto(2, { cap: v })} width={170} height={150} delay={0.5}  positionKey="el-6"/>
           </div>
           <div className="absolute" style={{ right: '8%', bottom: '0%' }}>
-            <Polaroid value={d.photos[3]?.img} onChange={(v) => setPhoto(3, { img: v })} rotation={d.photos[3]?.rot} caption={d.photos[3]?.cap} onCaptionChange={(v) => setPhoto(3, { cap: v })} width={170} height={150} delay={0.6} tape />
+            <Polaroid value={d.photos[3]?.img} onChange={(v) => setPhoto(3, { img: v })} rotation={d.photos[3]?.rot} caption={d.photos[3]?.cap} onCaptionChange={(v) => setPhoto(3, { cap: v })} width={170} height={150} delay={0.6} tape  positionKey="el-7"/>
           </div>
         </div>
       </div>

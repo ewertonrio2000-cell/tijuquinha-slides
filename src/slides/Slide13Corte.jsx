@@ -66,7 +66,7 @@ export default function Slide13Corte({ slideId }) {
               Descrição
             </div>
             <div className="text-[13px] text-muted leading-relaxed">
-              <EditableText value={d.description} onChange={(v) => set({ description: v })} multiline />
+              <EditableText value={d.description} onChange={(v) => set({ description: v })} multiline  positionKey="description"/>
             </div>
           </div>
           <div className="border-t border-line pt-4 relative">
@@ -74,7 +74,7 @@ export default function Slide13Corte({ slideId }) {
               Dimensões
             </div>
             <div className="text-[13px] text-ink leading-relaxed font-medium">
-              <EditableText value={d.measurements} onChange={(v) => set({ measurements: v })} multiline />
+              <EditableText value={d.measurements} onChange={(v) => set({ measurements: v })} multiline  positionKey="measurements"/>
             </div>
             <SketchMark
               type="underline"

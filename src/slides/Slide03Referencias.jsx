@@ -58,7 +58,7 @@ export default function Slide03Referencias({ slideId }) {
                 width={220}
                 height={220}
                 delay={0.05 * i}
-              />
+               positionKey={`image-${i}`}/>
               <motion.div
                 className="text-center max-w-[260px] mt-2"
                 initial={{ opacity: 0 }}
@@ -69,9 +69,9 @@ export default function Slide03Referencias({ slideId }) {
                   value={c.name}
                   onChange={(v) => setCard(i, { name: v })}
                   className="font-display text-2xl uppercase tracking-wide text-ink leading-tight"
-                />
+                 positionKey={`name-${i}`}/>
                 <div className="font-hand text-wine text-base mt-0.5">
-                  <EditableText value={c.place} onChange={(v) => setCard(i, { place: v })} />
+                  <EditableText value={c.place} onChange={(v) => setCard(i, { place: v })}  positionKey={`place-${i}`}/>
                 </div>
                 <div className="bg-wine mx-auto mt-2" style={{ width: 24, height: 2 }} />
                 <div className="text-[12px] text-muted leading-relaxed mt-3 px-2">
@@ -79,7 +79,7 @@ export default function Slide03Referencias({ slideId }) {
                     value={c.description}
                     onChange={(v) => setCard(i, { description: v })}
                     multiline
-                  />
+                   positionKey="description-3"/>
                 </div>
               </motion.div>
             </div>

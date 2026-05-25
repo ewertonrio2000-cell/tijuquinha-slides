@@ -40,7 +40,7 @@ export default function Slide01Proposta({ slideId }) {
                 onChange={(v) => set({ concept: v })}
                 multiline
                 sizeKey="concept"
-              />
+               positionKey="concept"/>
             </motion.div>
             <motion.div
               className="text-sm text-muted leading-relaxed max-w-md"
@@ -53,7 +53,7 @@ export default function Slide01Proposta({ slideId }) {
                 onChange={(v) => set({ description: v })}
                 multiline
                 sizeKey="description"
-              />
+               positionKey="description"/>
             </motion.div>
             <SketchMark
               type="underline"

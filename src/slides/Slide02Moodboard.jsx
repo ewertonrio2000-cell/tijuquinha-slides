@@ -58,7 +58,7 @@ export default function Slide02Moodboard({ slideId }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <EditableText value={d.caption} onChange={(v) => set({ caption: v })} multiline />
+          <EditableText value={d.caption} onChange={(v) => set({ caption: v })} multiline  positionKey="caption"/>
         </motion.div>
       </div>
 
@@ -99,7 +99,7 @@ export default function Slide02Moodboard({ slideId }) {
               delay={0.1 + i * 0.08}
               zIndex={i + 1}
               sizeKey={`poly-${i}`}
-            />
+             positionKey={`img-${i}`}/>
           </div>
         ))}
       </div>
