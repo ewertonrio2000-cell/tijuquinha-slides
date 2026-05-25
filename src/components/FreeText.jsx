@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { X, Type, Move } from 'lucide-react'
+import { X, Type, Move, AlignJustify } from 'lucide-react'
 import ResizeCorner from './ResizeCorner'
 
 /**
- * Texto livre flutuante — adicionado pelo usuário em qualquer ponto do slide.
- * Props:
- *  - text: { id, value, x, y (% do slide), size (multiplicador), color, fontFamily, bg }
- *  - onChange(nextText)
- *  - onRemove()
+ * Texto livre flutuante adicionado pelo usuário.
+ *
+ * text = {
+ *   id, value, x, y (% do slide),
+ *   size (multiplicador), width (px ou null = auto),
+ *   color, fontFamily, bg, align
+ * }
  */
 export default function FreeText({ text, onChange, onRemove }) {
   const ref = useRef(null)
   const focusedRef = useRef(false)
   const [hover, setHover] = useState(false)
+  const widthDragRef = useRef(null)
 
   useEffect(() => {
     if (!ref.current || focusedRef.current) return
@@ -25,9 +28,11 @@ export default function FreeText({ text, onChange, onRemove }) {
   const handleDragEnd = (_, info) => {
     const dxPct = (info.offset.x / 1280) * 100
     const dyPct = (info.offset.y / 720) * 100
-    const nx = Math.max(0, Math.min(95, text.x + dxPct))
-    const ny = Math.max(0, Math.min(95, text.y + dyPct))
-    onChange({ ...text, x: nx, y: ny })
+    onChange({
+      ...text,
+      x: Math.max(0, Math.min(95, text.x + dxPct)),
+      y: Math.max(0, Math.min(95, text.y + dyPct)),
+    })
   }
 
   const fontFamily =
@@ -36,6 +41,30 @@ export default function FreeText({ text, onChange, onRemove }) {
       : text.fontFamily === 'hand'
       ? "'Caveat', cursive"
       : "Inter, sans-serif"
+
+  const align = text.align || 'left'
+
+  const onWidthPointerDown = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const startW = text.width ?? ref.current?.offsetWidth ?? 200
+    const startX = e.clientX
+    widthDragRef.current = { startW, startX }
+    e.target.setPointerCapture(e.pointerId)
+  }
+  const onWidthPointerMove = (e) => {
+    if (!widthDragRef.current) return
+    const next = Math.max(60, Math.min(1200, widthDragRef.current.startW + (e.clientX - widthDragRef.current.startX)))
+    onChange({ ...text, width: Math.round(next) })
+  }
+  const onWidthPointerUp = (e) => {
+    widthDragRef.current = null
+    try { e.target.releasePointerCapture(e.pointerId) } catch {}
+  }
+  const onWidthDoubleClick = () => {
+    // Reset largura pra auto
+    onChange({ ...text, width: null })
+  }
 
   return (
     <motion.div
@@ -69,7 +98,10 @@ export default function FreeText({ text, onChange, onRemove }) {
             color: text.color || '#1A1A1A',
             background: text.bg || 'transparent',
             minWidth: 40,
-            whiteSpace: 'pre-wrap',
+            width: text.width ? `${text.width}px` : 'auto',
+            textAlign: align,
+            whiteSpace: text.width ? 'normal' : 'pre-wrap',
+            wordBreak: text.width ? 'break-word' : 'normal',
             border: hover ? '1px dashed rgba(110, 31, 38, 0.4)' : '1px dashed transparent',
             borderRadius: 3,
             cursor: 'text',
@@ -78,7 +110,7 @@ export default function FreeText({ text, onChange, onRemove }) {
           {text.value || ''}
         </div>
 
-        {/* Controles edit-only */}
+        {/* Toolbar edit-only */}
         {hover && (
           <div
             className="edit-only absolute -top-7 left-0 flex items-center gap-0.5 bg-wine text-cream rounded-full px-1 py-0.5 shadow-md z-50"
@@ -89,7 +121,6 @@ export default function FreeText({ text, onChange, onRemove }) {
               <span>mover</span>
             </span>
             <span className="w-px h-3 bg-cream/30" />
-            {/* Trocar fonte */}
             <button
               type="button"
               onClick={() => {
@@ -104,7 +135,20 @@ export default function FreeText({ text, onChange, onRemove }) {
               {text.fontFamily || 'sans'}
             </button>
             <span className="w-px h-3 bg-cream/30" />
-            {/* Cor */}
+            <button
+              type="button"
+              onClick={() => {
+                const cycle = ['left', 'center', 'right']
+                const next = cycle[(cycle.indexOf(align) + 1) % cycle.length]
+                onChange({ ...text, align: next })
+              }}
+              className="px-1.5 py-0.5 hover:bg-wine-700 rounded text-[9px] uppercase tracking-wider font-semibold"
+              title="Alinhamento do texto"
+            >
+              <AlignJustify size={10} className="inline mr-0.5" />
+              {align}
+            </button>
+            <span className="w-px h-3 bg-cream/30" />
             <input
               type="color"
               value={text.color || '#1A1A1A'}
@@ -124,13 +168,44 @@ export default function FreeText({ text, onChange, onRemove }) {
           </div>
         )}
 
-        {/* Resize handle */}
+        {/* Handle de largura (lateral direita — drag horizontal) */}
+        <div
+          className="edit-only absolute z-30 select-none"
+          onPointerDown={onWidthPointerDown}
+          onPointerMove={onWidthPointerMove}
+          onPointerUp={onWidthPointerUp}
+          onPointerCancel={onWidthPointerUp}
+          onDoubleClick={onWidthDoubleClick}
+          title="Arraste pra ajustar largura · duplo-clique pra resetar"
+          style={{
+            top: '50%',
+            right: -8,
+            transform: 'translateY(-50%)',
+            width: 10,
+            height: 32,
+            background: '#6E1F26',
+            color: '#F5EFE6',
+            borderRadius: 3,
+            cursor: 'ew-resize',
+            touchAction: 'none',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 9,
+            fontWeight: 700,
+          }}
+        >
+          ⇔
+        </div>
+
+        {/* Resize handle (canto inferior direito — drag diagonal pra escala) */}
         <ResizeCorner
           value={text.size}
           onChange={(v) => onChange({ ...text, size: v })}
           min={0.5}
           max={6}
-          tooltip="Arraste para redimensionar"
+          tooltip="Arraste para redimensionar a fonte"
         />
       </div>
     </motion.div>
