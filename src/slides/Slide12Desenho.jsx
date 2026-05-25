@@ -4,6 +4,7 @@ import EditableText from '../components/EditableText'
 import Polaroid from '../components/Polaroid'
 import Callout from '../components/Callout'
 import SlideTitle from '../components/SlideTitle'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -16,6 +17,7 @@ const defaults = {
     { x: 35, y: 55, label: 'calçada ampliada', rotation: -20 },
     { x: 65, y: 45, label: 'ciclovia segregada', rotation: 20 },
   ],
+  sizes: {},
 }
 
 export default function Slide12Desenho({ slideId }) {
@@ -28,6 +30,7 @@ export default function Slide12Desenho({ slideId }) {
     set({ callouts: d.callouts.filter((_, idx) => idx !== i) })
 
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full p-12 flex flex-col gap-4 relative">
       <div className="flex items-end justify-between">
         <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
@@ -72,5 +75,6 @@ export default function Slide12Desenho({ slideId }) {
         <Plus size={12} /> Anotação
       </button>
     </div>
+    </SizeProvider>
   )
 }

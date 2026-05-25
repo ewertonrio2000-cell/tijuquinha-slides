@@ -5,6 +5,7 @@ import ImageUpload from '../components/ImageUpload'
 import SlideTitle from '../components/SlideTitle'
 import SketchMark from '../components/SketchMark'
 import { Stagger, StaggerItem } from '../components/Stagger'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -19,6 +20,7 @@ const defaults = {
     { title: 'Iluminação', text: 'Fazer o projeto de iluminação da rua principal e realocar os postes.' },
     { title: 'Pontos de Ônibus', text: 'Implantar pontos de ônibus mais confortáveis, de forma que a passagem não fique prejudicada.' },
   ],
+  sizes: {},
 }
 
 const AXIS_ICONS = [Footprints, Cable, Lightbulb, Bus]
@@ -29,6 +31,7 @@ export default function Slide08Proposta({ slideId }) {
     set({ axes: d.axes.map((a, idx) => (idx === i ? { ...a, ...patch } : a)) })
 
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full p-12 flex flex-col gap-5 relative">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 
@@ -108,5 +111,6 @@ export default function Slide08Proposta({ slideId }) {
         </div>
       </div>
     </div>
+    </SizeProvider>
   )
 }

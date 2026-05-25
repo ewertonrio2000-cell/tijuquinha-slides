@@ -8,7 +8,7 @@ import EditableText from './EditableText'
  *  - linha bordô fina abaixo
  *  - opcional `tone="wine"` para slides com fundo bordô (texto creme).
  */
-export default function SlideTitle({ value, onChange, eyebrow, size = 'lg', tone = 'dark' }) {
+export default function SlideTitle({ value, onChange, eyebrow, size = 'lg', tone = 'dark', sizeKey = 'title' }) {
   const sizes = {
     sm: 'text-3xl',
     md: 'text-5xl',
@@ -35,6 +35,7 @@ export default function SlideTitle({ value, onChange, eyebrow, size = 'lg', tone
         value={value}
         onChange={onChange}
         multiline
+        sizeKey={sizeKey}
         className={`font-display ${sizes[size]} leading-[0.95] uppercase ${titleColor}`}
       />
       <div className={`${barColor} mt-3`} style={{ width: 56, height: 2.5 }} />

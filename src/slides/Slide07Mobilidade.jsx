@@ -5,6 +5,7 @@ import Polaroid from '../components/Polaroid'
 import Callout from '../components/Callout'
 import SlideTitle from '../components/SlideTitle'
 import { Stagger, StaggerItem } from '../components/Stagger'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const ICONS = { bike: Bike, bus: Bus, foot: Footprints, car: Car }
@@ -25,6 +26,7 @@ const defaults = {
     { x: 70, y: 30, label: 'ciclofaixa', rotation: -25 },
     { x: 78, y: 65, label: 'travessia segura', rotation: 25 },
   ],
+  sizes: {},
 }
 
 export default function Slide07Mobilidade({ slideId }) {
@@ -47,6 +49,7 @@ export default function Slide07Mobilidade({ slideId }) {
     set({ callouts: d.callouts.filter((_, idx) => idx !== i) })
 
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full p-12 flex flex-col gap-5 relative">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 
@@ -130,5 +133,6 @@ export default function Slide07Mobilidade({ slideId }) {
         <Plus size={12} /> Anotação
       </button>
     </div>
+    </SizeProvider>
   )
 }

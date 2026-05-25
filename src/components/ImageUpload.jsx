@@ -96,7 +96,8 @@ export default function ImageUpload({
           <img
             src={value}
             alt={label || 'imagem'}
-            className={`w-full h-full ${fit === 'cover' ? 'object-cover' : 'object-contain'}`}
+            className={`w-full h-full block ${fit === 'cover' ? 'object-cover' : 'object-contain'}`}
+            style={{ objectPosition: 'center' }}
             draggable={false}
           />
           <div className="edit-only absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">

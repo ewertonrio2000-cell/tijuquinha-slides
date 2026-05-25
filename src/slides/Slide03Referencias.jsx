@@ -3,6 +3,7 @@ import EditableText from '../components/EditableText'
 import Polaroid from '../components/Polaroid'
 import SlideTitle from '../components/SlideTitle'
 import { Stagger, StaggerItem } from '../components/Stagger'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -31,6 +32,7 @@ const defaults = {
       rot: -2,
     },
   ],
+  sizes: {},
 }
 
 export default function Slide03Referencias({ slideId }) {
@@ -39,6 +41,7 @@ export default function Slide03Referencias({ slideId }) {
     set({ cards: d.cards.map((c, idx) => (idx === i ? { ...c, ...patch } : c)) })
 
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full p-12 flex flex-col gap-6 relative">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 
@@ -83,5 +86,6 @@ export default function Slide03Referencias({ slideId }) {
         ))}
       </Stagger>
     </div>
+    </SizeProvider>
   )
 }

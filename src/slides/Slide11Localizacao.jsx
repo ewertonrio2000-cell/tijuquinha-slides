@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import EditableText from '../components/EditableText'
 import Polaroid from '../components/Polaroid'
 import SlideTitle from '../components/SlideTitle'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -17,6 +18,7 @@ const defaults = {
     { img: null, rot: -2, cap: 'ponto de ônibus' },
     { img: null, rot: 3, cap: 'travessia' },
   ],
+  sizes: {},
 }
 
 export default function Slide11Localizacao({ slideId }) {
@@ -25,6 +27,7 @@ export default function Slide11Localizacao({ slideId }) {
     set({ photos: d.photos.map((p, idx) => (idx === i ? { ...p, ...patch } : p)) })
 
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full p-12 flex flex-col gap-4">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
       <div className="grid grid-cols-2 gap-8 flex-1 min-h-0">
@@ -77,5 +80,6 @@ export default function Slide11Localizacao({ slideId }) {
         </div>
       </div>
     </div>
+    </SizeProvider>
   )
 }

@@ -3,6 +3,7 @@ import EditableText from '../components/EditableText'
 import Polaroid from '../components/Polaroid'
 import SlideTitle from '../components/SlideTitle'
 import { Stagger, StaggerItem } from '../components/Stagger'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -17,6 +18,7 @@ const defaults = {
   depoimento3: 'Poucos pontos de ônibus e sem lugar para sentar',
   image1: null,
   image2: null,
+  sizes: {},
 }
 
 function StickyQuote({ value, onChange, rotation = -2, delay = 0 }) {
@@ -39,6 +41,7 @@ function StickyQuote({ value, onChange, rotation = -2, delay = 0 }) {
 export default function Slide1_1Diagnostico({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full p-12 flex flex-col gap-6">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 
@@ -106,5 +109,6 @@ export default function Slide1_1Diagnostico({ slideId }) {
         </div>
       </div>
     </div>
+    </SizeProvider>
   )
 }

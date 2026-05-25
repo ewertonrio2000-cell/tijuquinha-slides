@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import EditableText from '../components/EditableText'
 import ImageUpload from '../components/ImageUpload'
 import SketchMark from '../components/SketchMark'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -16,11 +17,13 @@ const defaults = {
   student2Id: '202303653921',
   year: '2026',
   image: null,
+  sizes: {},
 }
 
 export default function Slide00Cover({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full grid grid-cols-12 gap-0 relative overflow-hidden">
       {/* Coluna esquerda — Título */}
       <div className="col-span-7 p-14 flex flex-col justify-between border-r border-cream/15 relative">
@@ -141,5 +144,6 @@ export default function Slide00Cover({ slideId }) {
         </motion.div>
       </div>
     </div>
+    </SizeProvider>
   )
 }

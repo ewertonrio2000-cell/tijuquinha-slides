@@ -3,6 +3,7 @@ import EditableText from '../components/EditableText'
 import ImageUpload from '../components/ImageUpload'
 import SlideTitle from '../components/SlideTitle'
 import SketchMark from '../components/SketchMark'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -13,11 +14,13 @@ const defaults = {
   measurements:
     '• Calçada: 3,00 m\n• Faixa de arborização: 1,20 m\n• Ciclovia bidirecional: 2,50 m\n• Faixa de rolamento: 3,00 m por sentido\n• Ponto de ônibus: integrado à calçada',
   image: null,
+  sizes: {},
 }
 
 export default function Slide13Corte({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full p-12 flex flex-col gap-5">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
       <div className="grid grid-cols-12 gap-6 flex-1 min-h-0">
@@ -82,5 +85,6 @@ export default function Slide13Corte({ slideId }) {
         </motion.div>
       </div>
     </div>
+    </SizeProvider>
   )
 }

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import EditableText from '../components/EditableText'
 import SlideTitle from '../components/SlideTitle'
 import { Stagger, StaggerItem } from '../components/Stagger'
+import { SizeProvider } from '../components/SizeContext'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -22,6 +23,7 @@ const defaults = {
     'Iluminação pública renovada',
     'Áreas de estar e arborização',
   ],
+  sizes: {},
 }
 
 function EditList({ items, onChange }) {
@@ -59,6 +61,7 @@ function EditList({ items, onChange }) {
 export default function Slide04Diretrizes({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
+    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
     <div className="w-full h-full p-14 flex flex-col gap-8">
       <SlideTitle
         eyebrow={d.eyebrow}
@@ -82,5 +85,6 @@ export default function Slide04Diretrizes({ slideId }) {
         </motion.div>
       </div>
     </div>
+    </SizeProvider>
   )
 }
