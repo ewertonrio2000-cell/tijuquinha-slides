@@ -5,6 +5,7 @@ import SlideTitle from '../components/SlideTitle'
 import SketchMark from '../components/SketchMark'
 import { SizeProvider } from '../components/SizeContext'
 import FreeTextLayer from '../components/FreeTextLayer'
+import HiddenItemsBadge from '../components/HiddenItemsBadge'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -17,12 +18,13 @@ const defaults = {
   sizes: {},
   positions: {},
   freeTexts: [],
+  hidden: [],
 }
 
 export default function Slide01Proposta({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} hidden={d.hidden || []} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })} onHiddenChange={(hidden) => set({ hidden })}>
       <div className="w-full h-full grid grid-cols-2 gap-0 relative">
         <div className="p-12 flex flex-col justify-between border-r border-line relative">
           <SlideTitle
@@ -80,6 +82,7 @@ export default function Slide01Proposta({ slideId }) {
         </div>
       </div>
       <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
+      <HiddenItemsBadge />
     </SizeProvider>
   )
 }

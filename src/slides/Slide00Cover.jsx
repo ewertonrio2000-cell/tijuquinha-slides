@@ -4,6 +4,7 @@ import ImageUpload from '../components/ImageUpload'
 import SketchMark from '../components/SketchMark'
 import { SizeProvider } from '../components/SizeContext'
 import FreeTextLayer from '../components/FreeTextLayer'
+import HiddenItemsBadge from '../components/HiddenItemsBadge'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -21,12 +22,13 @@ const defaults = {
   sizes: {},
   positions: {},
   freeTexts: [],
+  hidden: [],
 }
 
 export default function Slide00Cover({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} hidden={d.hidden || []} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })} onHiddenChange={(hidden) => set({ hidden })}>
     <div className="w-full h-full grid grid-cols-12 gap-0 relative overflow-hidden">
       {/* Coluna esquerda — Título */}
       <div className="col-span-7 p-14 flex flex-col justify-between border-r border-cream/15 relative">
@@ -148,6 +150,7 @@ export default function Slide00Cover({ slideId }) {
       </div>
     </div>
       <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
+      <HiddenItemsBadge />
     </SizeProvider>
   )
 }

@@ -5,6 +5,7 @@ import SlideTitle from '../components/SlideTitle'
 import { Stagger, StaggerItem } from '../components/Stagger'
 import { SizeProvider } from '../components/SizeContext'
 import FreeTextLayer from '../components/FreeTextLayer'
+import HiddenItemsBadge from '../components/HiddenItemsBadge'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -36,6 +37,7 @@ const defaults = {
   sizes: {},
   positions: {},
   freeTexts: [],
+  hidden: [],
 }
 
 export default function Slide03Referencias({ slideId }) {
@@ -44,7 +46,7 @@ export default function Slide03Referencias({ slideId }) {
     set({ cards: d.cards.map((c, idx) => (idx === i ? { ...c, ...patch } : c)) })
 
   return (
-    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} hidden={d.hidden || []} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })} onHiddenChange={(hidden) => set({ hidden })}>
     <div className="w-full h-full p-12 flex flex-col gap-6 relative">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 
@@ -90,6 +92,7 @@ export default function Slide03Referencias({ slideId }) {
       </Stagger>
     </div>
       <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
+      <HiddenItemsBadge />
     </SizeProvider>
   )
 }

@@ -1,20 +1,18 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Move, RotateCcw } from 'lucide-react'
-import { usePosition } from './SizeContext'
+import { motion, useMotionValue } from 'framer-motion'
+import { Move, RotateCcw, Trash2 } from 'lucide-react'
+import { usePosition, useHidden } from './SizeContext'
 
 /**
- * Wrapper que torna qualquer elemento reposicionável via drag.
+ * Wrapper que torna qualquer elemento reposicionável (drag), removível e restaurável.
  *
  * Props:
- *  - positionKey: identificador único para guardar o offset {x,y} no SizeContext
- *  - children: elemento a reposicionar
- *  - className: classes adicionais aplicadas ao container drag
- *  - handle: 'auto' (handle aparece no hover) | 'always' | 'none'
- *  - inline: bool — usa display: inline-block (default false = block-level)
- *
- * O offset é aplicado via style.x/y (transform). Inicial é {x:0,y:0} =
- * mantém posição original do layout. Cada drag-end soma o delta no offset.
+ *  - positionKey: identificador único (também usado para hidden)
+ *  - children
+ *  - className
+ *  - handle: 'auto' | 'always' | 'none'
+ *  - inline: bool
+ *  - allowDelete: bool — mostra botão de excluir no handle (default true)
  */
 export default function Draggable({
   positionKey,
@@ -23,11 +21,19 @@ export default function Draggable({
   handle = 'auto',
   inline = false,
   zIndex = 5,
+  allowDelete = true,
 }) {
   const [pos, setPos, resetPos] = usePosition(positionKey)
+  const [isHidden, setIsHidden] = useHidden(positionKey)
   const [hover, setHover] = useState(false)
   const [dragging, setDragging] = useState(false)
   const enabled = !!setPos
+
+  const mvX = useMotionValue(pos.x)
+  const mvY = useMotionValue(pos.y)
+
+  // Se está oculto, não renderiza (mas o positionKey continua reservado pra restauração)
+  if (isHidden) return null
 
   return (
     <motion.div
@@ -36,23 +42,26 @@ export default function Draggable({
       dragMomentum={false}
       dragElastic={0}
       style={{
-        x: pos.x,
-        y: pos.y,
+        x: mvX,
+        y: mvY,
         cursor: enabled ? (dragging ? 'grabbing' : 'grab') : undefined,
         zIndex: hover || dragging ? 40 : zIndex,
       }}
       onDragStart={() => setDragging(true)}
       onDragEnd={(_, info) => {
         setDragging(false)
-        if (enabled) setPos({ x: pos.x + info.offset.x, y: pos.y + info.offset.y })
+        if (!enabled) return
+        const newX = pos.x + info.offset.x
+        const newY = pos.y + info.offset.y
+        mvX.set(newX)
+        mvY.set(newY)
+        setPos({ x: newX, y: newY })
       }}
       onHoverStart={() => setHover(true)}
       onHoverEnd={() => setHover(false)}
-      whileHover={enabled ? { scale: 1.005 } : undefined}
     >
       {children}
 
-      {/* Indicador de drag + reset position */}
       {enabled && (handle === 'always' || (handle === 'auto' && hover)) && (
         <div
           className="edit-only absolute -top-3 -left-3 flex items-center gap-0.5 bg-wine text-cream rounded-full px-1 py-0.5 shadow-md z-50 pointer-events-auto"
@@ -67,12 +76,27 @@ export default function Draggable({
               type="button"
               onClick={(e) => {
                 e.stopPropagation()
+                mvX.set(0)
+                mvY.set(0)
                 resetPos && resetPos()
               }}
               className="px-1.5 py-0.5 hover:bg-wine-700 rounded-full"
               title="Voltar à posição original"
             >
               <RotateCcw size={11} />
+            </button>
+          )}
+          {allowDelete && setIsHidden && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsHidden(true)
+              }}
+              className="px-1.5 py-0.5 hover:bg-red-700 rounded-full"
+              title="Excluir este elemento"
+            >
+              <Trash2 size={11} />
             </button>
           )}
         </div>

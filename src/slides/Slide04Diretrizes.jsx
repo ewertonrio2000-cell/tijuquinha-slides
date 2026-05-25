@@ -5,6 +5,7 @@ import SlideTitle from '../components/SlideTitle'
 import { Stagger, StaggerItem } from '../components/Stagger'
 import { SizeProvider } from '../components/SizeContext'
 import FreeTextLayer from '../components/FreeTextLayer'
+import HiddenItemsBadge from '../components/HiddenItemsBadge'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -27,6 +28,7 @@ const defaults = {
   sizes: {},
   positions: {},
   freeTexts: [],
+  hidden: [],
 }
 
 function EditList({ items, onChange }) {
@@ -64,7 +66,7 @@ function EditList({ items, onChange }) {
 export default function Slide04Diretrizes({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} hidden={d.hidden || []} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })} onHiddenChange={(hidden) => set({ hidden })}>
     <div className="w-full h-full p-14 flex flex-col gap-8">
       <SlideTitle
         eyebrow={d.eyebrow}
@@ -89,6 +91,7 @@ export default function Slide04Diretrizes({ slideId }) {
       </div>
     </div>
       <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
+      <HiddenItemsBadge />
     </SizeProvider>
   )
 }

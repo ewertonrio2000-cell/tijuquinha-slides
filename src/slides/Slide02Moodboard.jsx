@@ -7,6 +7,7 @@ import ColorSwatch from '../components/ColorSwatch'
 import SlideTitle from '../components/SlideTitle'
 import { SizeProvider } from '../components/SizeContext'
 import FreeTextLayer from '../components/FreeTextLayer'
+import HiddenItemsBadge from '../components/HiddenItemsBadge'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -29,6 +30,7 @@ const defaults = {
   sizes: {},
   positions: {},
   freeTexts: [],
+  hidden: [],
 }
 
 export default function Slide02Moodboard({ slideId }) {
@@ -47,7 +49,7 @@ export default function Slide02Moodboard({ slideId }) {
     set({ callouts: d.callouts.filter((_, idx) => idx !== i) })
 
   return (
-    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} hidden={d.hidden || []} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })} onHiddenChange={(hidden) => set({ hidden })}>
     <div className="w-full h-full relative">
       {/* Cabeçalho compacto sobreposto */}
       <div className="absolute top-10 left-12 right-12 z-10 flex items-start justify-between pointer-events-none">
@@ -129,6 +131,7 @@ export default function Slide02Moodboard({ slideId }) {
       </button>
     </div>
       <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
+      <HiddenItemsBadge />
     </SizeProvider>
   )
 }
