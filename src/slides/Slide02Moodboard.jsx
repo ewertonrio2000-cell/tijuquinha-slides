@@ -26,6 +26,7 @@ const defaults = {
   ],
   palette: ['#4F5B45', '#A85F47', '#C77E5A', '#D9CCB4'],
   sizes: {},
+  positions: {},
 }
 
 export default function Slide02Moodboard({ slideId }) {
@@ -44,7 +45,7 @@ export default function Slide02Moodboard({ slideId }) {
     set({ callouts: d.callouts.filter((_, idx) => idx !== i) })
 
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full relative">
       {/* Cabeçalho compacto sobreposto */}
       <div className="absolute top-10 left-12 right-12 z-10 flex items-start justify-between pointer-events-none">

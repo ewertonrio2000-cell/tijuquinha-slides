@@ -19,6 +19,7 @@ const defaults = {
   image1: null,
   image2: null,
   sizes: {},
+  positions: {},
 }
 
 function StickyQuote({ value, onChange, rotation = -2, delay = 0 }) {
@@ -41,7 +42,7 @@ function StickyQuote({ value, onChange, rotation = -2, delay = 0 }) {
 export default function Slide1_1Diagnostico({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-6">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 

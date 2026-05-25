@@ -15,12 +15,13 @@ const defaults = {
   detail: 'CAD do trecho de intervenção',
   image: null,
   sizes: {},
+  positions: {},
 }
 
 export default function Slide10Recorte({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-4">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
       <div className="grid grid-cols-12 gap-6 flex-1 min-h-0">
@@ -29,6 +30,7 @@ export default function Slide10Recorte({ slideId }) {
             value={d.image}
             onChange={(v) => set({ image: v })}
             rotation={-1.5}
+            positionKey="cad"
             tape
             width={680}
             height={440}

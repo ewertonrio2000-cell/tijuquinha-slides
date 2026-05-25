@@ -18,6 +18,7 @@ const defaults = {
     { x: 65, y: 45, label: 'ciclovia segregada', rotation: 20 },
   ],
   sizes: {},
+  positions: {},
 }
 
 export default function Slide12Desenho({ slideId }) {
@@ -30,7 +31,7 @@ export default function Slide12Desenho({ slideId }) {
     set({ callouts: d.callouts.filter((_, idx) => idx !== i) })
 
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-4 relative">
       <div className="flex items-end justify-between">
         <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
@@ -52,6 +53,7 @@ export default function Slide12Desenho({ slideId }) {
           width={780}
           height={460}
           delay={0.2}
+          positionKey="hero"
         />
       </div>
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Plus, Minus } from 'lucide-react'
 import { useSize } from './SizeContext'
+import Draggable from './Draggable'
 
 /**
  * Texto editável inline via contentEditable.
@@ -15,6 +16,7 @@ export default function EditableText({
   multiline = false,
   as: Tag = 'div',
   sizeKey,
+  positionKey,
 }) {
   const ref = useRef(null)
   const focusedRef = useRef(false)
@@ -42,7 +44,7 @@ export default function EditableText({
 
   const showControls = sizeKey && setSizeDelta && hover
 
-  return (
+  const content = (
     <span
       className="relative inline-block w-full"
       onMouseEnter={() => setHover(true)}
@@ -99,4 +101,9 @@ export default function EditableText({
       )}
     </span>
   )
+
+  if (positionKey) {
+    return <Draggable positionKey={positionKey} inline>{content}</Draggable>
+  }
+  return content
 }

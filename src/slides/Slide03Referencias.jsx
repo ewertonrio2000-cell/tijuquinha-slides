@@ -33,6 +33,7 @@ const defaults = {
     },
   ],
   sizes: {},
+  positions: {},
 }
 
 export default function Slide03Referencias({ slideId }) {
@@ -41,7 +42,7 @@ export default function Slide03Referencias({ slideId }) {
     set({ cards: d.cards.map((c, idx) => (idx === i ? { ...c, ...patch } : c)) })
 
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-6 relative">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 

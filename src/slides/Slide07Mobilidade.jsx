@@ -27,6 +27,7 @@ const defaults = {
     { x: 78, y: 65, label: 'travessia segura', rotation: 25 },
   ],
   sizes: {},
+  positions: {},
 }
 
 export default function Slide07Mobilidade({ slideId }) {
@@ -49,7 +50,7 @@ export default function Slide07Mobilidade({ slideId }) {
     set({ callouts: d.callouts.filter((_, idx) => idx !== i) })
 
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-5 relative">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 

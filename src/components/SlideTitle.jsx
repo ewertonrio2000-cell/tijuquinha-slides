@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import EditableText from './EditableText'
+import Draggable from './Draggable'
 
 /**
  * Título de slide no estilo da referência:
@@ -8,7 +9,7 @@ import EditableText from './EditableText'
  *  - linha bordô fina abaixo
  *  - opcional `tone="wine"` para slides com fundo bordô (texto creme).
  */
-export default function SlideTitle({ value, onChange, eyebrow, size = 'lg', tone = 'dark', sizeKey = 'title' }) {
+export default function SlideTitle({ value, onChange, eyebrow, size = 'lg', tone = 'dark', sizeKey = 'title', positionKey = 'title' }) {
   const sizes = {
     sm: 'text-3xl',
     md: 'text-5xl',
@@ -21,6 +22,7 @@ export default function SlideTitle({ value, onChange, eyebrow, size = 'lg', tone
   const barColor = tone === 'wine' ? 'bg-cream' : 'bg-wine'
 
   return (
+    <Draggable positionKey={positionKey} inline>
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
@@ -40,5 +42,6 @@ export default function SlideTitle({ value, onChange, eyebrow, size = 'lg', tone
       />
       <div className={`${barColor} mt-3`} style={{ width: 56, height: 2.5 }} />
     </motion.div>
+    </Draggable>
   )
 }

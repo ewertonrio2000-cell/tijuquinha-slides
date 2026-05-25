@@ -24,6 +24,7 @@ const defaults = {
     'Áreas de estar e arborização',
   ],
   sizes: {},
+  positions: {},
 }
 
 function EditList({ items, onChange }) {
@@ -61,7 +62,7 @@ function EditList({ items, onChange }) {
 export default function Slide04Diretrizes({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-14 flex flex-col gap-8">
       <SlideTitle
         eyebrow={d.eyebrow}

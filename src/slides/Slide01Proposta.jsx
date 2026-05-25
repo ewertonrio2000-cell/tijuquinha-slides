@@ -14,12 +14,13 @@ const defaults = {
     'O local escolhido para o projeto foi a Tijuquinha, na Estrada da Barra da Tijuca. A proposta busca requalificar o trecho a partir da uniformização das calçadas, do redesenho da mobilidade, da iluminação adequada e da implantação de pontos de ônibus mais confortáveis — devolvendo qualidade urbana e segurança aos moradores e pedestres.',
   image: null,
   sizes: {},
+  positions: {},
 }
 
 export default function Slide01Proposta({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
       <div className="w-full h-full grid grid-cols-2 gap-0 relative">
         <div className="p-12 flex flex-col justify-between border-r border-line relative">
           <SlideTitle
@@ -71,6 +72,7 @@ export default function Slide01Proposta({ slideId }) {
             width={460}
             height={500}
             delay={0.2}
+            positionKey="hero"
             sizeKey="heroImage"
           />
         </div>

@@ -19,6 +19,7 @@ const defaults = {
     { img: null, rot: 3, cap: 'travessia' },
   ],
   sizes: {},
+  positions: {},
 }
 
 export default function Slide11Localizacao({ slideId }) {
@@ -27,7 +28,7 @@ export default function Slide11Localizacao({ slideId }) {
     set({ photos: d.photos.map((p, idx) => (idx === i ? { ...p, ...patch } : p)) })
 
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-4">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
       <div className="grid grid-cols-2 gap-8 flex-1 min-h-0">
@@ -41,6 +42,7 @@ export default function Slide11Localizacao({ slideId }) {
             width={500}
             height={380}
             delay={0.2}
+            positionKey="map"
           />
           <motion.div
             className="absolute right-3 top-3 text-wine"

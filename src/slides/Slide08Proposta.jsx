@@ -21,6 +21,7 @@ const defaults = {
     { title: 'Pontos de Ônibus', text: 'Implantar pontos de ônibus mais confortáveis, de forma que a passagem não fique prejudicada.' },
   ],
   sizes: {},
+  positions: {},
 }
 
 const AXIS_ICONS = [Footprints, Cable, Lightbulb, Bus]
@@ -31,7 +32,7 @@ export default function Slide08Proposta({ slideId }) {
     set({ axes: d.axes.map((a, idx) => (idx === i ? { ...a, ...patch } : a)) })
 
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-5 relative">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 

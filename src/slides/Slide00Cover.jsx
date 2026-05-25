@@ -18,12 +18,13 @@ const defaults = {
   year: '2026',
   image: null,
   sizes: {},
+  positions: {},
 }
 
 export default function Slide00Cover({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full grid grid-cols-12 gap-0 relative overflow-hidden">
       {/* Coluna esquerda — Título */}
       <div className="col-span-7 p-14 flex flex-col justify-between border-r border-cream/15 relative">

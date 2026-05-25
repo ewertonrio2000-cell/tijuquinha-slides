@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Plus, Minus, Crop } from 'lucide-react'
 import ImageUpload from './ImageUpload'
 import { useSize } from './SizeContext'
+import Draggable from './Draggable'
 
 /**
  * Polaroid: borda branca, leve rotação, sombra, tape opcional, legenda manuscrita.
@@ -25,6 +26,7 @@ export default function Polaroid({
   delay = 0,
   zIndex = 1,
   sizeKey,
+  positionKey,
   fit = 'cover',
   fitToggle = true,
 }) {
@@ -36,7 +38,7 @@ export default function Polaroid({
   const W = width * size
   const H = height * size
 
-  return (
+  const inner = (
     <motion.div
       className={`relative bg-white p-2.5 pb-7 shadow-[0_6px_20px_-8px_rgba(0,0,0,0.35)] ${className}`}
       style={{ width: W + 20, transformOrigin: 'center center', zIndex }}
@@ -110,4 +112,9 @@ export default function Polaroid({
       )}
     </motion.div>
   )
+
+  if (positionKey) {
+    return <Draggable positionKey={positionKey} inline>{inner}</Draggable>
+  }
+  return inner
 }

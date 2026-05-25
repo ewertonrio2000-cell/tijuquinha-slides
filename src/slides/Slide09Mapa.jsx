@@ -13,12 +13,13 @@ const defaults = {
   legend: 'Mapa do trecho da Estrada da Barra da Tijuca — Tijuquinha, com indicação dos principais pontos de intervenção.',
   image: null,
   sizes: {},
+  positions: {},
 }
 
 export default function Slide09Mapa({ slideId }) {
   const [d, set] = useSlideStorage(slideId, defaults)
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-4 relative">
       <div className="flex items-end justify-between">
         <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />

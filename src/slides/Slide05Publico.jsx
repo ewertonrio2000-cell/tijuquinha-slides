@@ -16,6 +16,7 @@ const defaults = {
     { image: null, name: 'Trabalhadores', tag: 'fluxo', age: '20–55 anos', needs: 'Conexões de transporte público eficientes e abrigadas.' },
   ],
   sizes: {},
+  positions: {},
 }
 
 export default function Slide05Publico({ slideId }) {
@@ -24,7 +25,7 @@ export default function Slide05Publico({ slideId }) {
     set({ personas: d.personas.map((p, idx) => (idx === i ? { ...p, ...patch } : p)) })
 
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-8">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
       <Stagger className="grid grid-cols-4 gap-6 flex-1 min-h-0" gap={0.12} delay={0.15}>

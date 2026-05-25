@@ -20,6 +20,7 @@ const defaults = {
     { x: 72, y: 55, label: 'nova espécie', rotation: -25 },
   ],
   sizes: {},
+  positions: {},
 }
 
 export default function Slide06Paisagismo({ slideId }) {
@@ -32,7 +33,7 @@ export default function Slide06Paisagismo({ slideId }) {
     set({ callouts: d.callouts.filter((_, idx) => idx !== i) })
 
   return (
-    <SizeProvider sizes={d.sizes} onSizesChange={(sizes) => set({ sizes })}>
+    <SizeProvider sizes={d.sizes} positions={d.positions} onSizesChange={(sizes) => set({ sizes })} onPositionsChange={(positions) => set({ positions })}>
     <div className="w-full h-full p-12 flex flex-col gap-5 relative">
       <SlideTitle eyebrow={d.eyebrow} value={d.title} onChange={(v) => set({ title: v })} size="md" />
 
@@ -63,6 +64,7 @@ export default function Slide06Paisagismo({ slideId }) {
               height={300}
               caption="ANTES"
               delay={0.2}
+              positionKey="antes"
               zIndex={1}
             />
           </div>
@@ -75,6 +77,7 @@ export default function Slide06Paisagismo({ slideId }) {
               height={300}
               caption="DEPOIS"
               delay={0.35}
+              positionKey="depois"
               zIndex={2}
             />
           </div>
