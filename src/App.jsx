@@ -236,6 +236,7 @@ export default function App() {
             <motion.div
               key={slide.id}
               custom={direction}
+              data-slide-canvas
               initial={(d) => ({ opacity: 0, x: d > 0 ? 40 : -40 })}
               animate={{ opacity: 1, x: 0 }}
               exit={(d) => ({ opacity: 0, x: d > 0 ? -40 : 40 })}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue } from 'framer-motion'
 import { X, Type, Move, AlignJustify } from 'lucide-react'
 import ResizeCorner from './ResizeCorner'
 
@@ -8,15 +8,21 @@ import ResizeCorner from './ResizeCorner'
  *
  * text = {
  *   id, value, x, y (% do slide),
- *   size (multiplicador), width (px ou null = auto),
+ *   size (multiplicador), width (px ou null),
  *   color, fontFamily, bg, align
  * }
  */
 export default function FreeText({ text, onChange, onRemove }) {
   const ref = useRef(null)
+  const containerRef = useRef(null)
   const focusedRef = useRef(false)
   const [hover, setHover] = useState(false)
   const widthDragRef = useRef(null)
+
+  // Motion values controlam o offset durante o drag. Resetamos pra 0 ao soltar
+  // pra que `left/top` em % governe a posição final sem somar o transform residual.
+  const mvX = useMotionValue(0)
+  const mvY = useMotionValue(0)
 
   useEffect(() => {
     if (!ref.current || focusedRef.current) return
@@ -26,8 +32,26 @@ export default function FreeText({ text, onChange, onRemove }) {
   const handleInput = (e) => onChange({ ...text, value: e.currentTarget.innerText })
 
   const handleDragEnd = (_, info) => {
-    const dxPct = (info.offset.x / 1280) * 100
-    const dyPct = (info.offset.y / 720) * 100
+    // Usa o tamanho REAL renderizado do slide (1280×720 antes da escala da página)
+    // pra converter o offset do cursor (px na tela) em % do slide.
+    let slideW = 1280
+    let slideH = 720
+    const slideEl = containerRef.current?.closest('[data-slide-canvas]') || null
+    if (slideEl) {
+      const r = slideEl.getBoundingClientRect()
+      // Como o slide pode estar escalado via CSS transform, getBoundingClientRect
+      // dá os pixels NA TELA, que é exatamente o sistema do info.offset.
+      slideW = r.width
+      slideH = r.height
+    }
+    const dxPct = (info.offset.x / slideW) * 100
+    const dyPct = (info.offset.y / slideH) * 100
+
+    // Reseta o transform residual do framer-motion ANTES de atualizar o state,
+    // assim o re-render usa só left/top sem transform.
+    mvX.set(0)
+    mvY.set(0)
+
     onChange({
       ...text,
       x: Math.max(0, Math.min(95, text.x + dxPct)),
@@ -44,35 +68,43 @@ export default function FreeText({ text, onChange, onRemove }) {
 
   const align = text.align || 'left'
 
+  // Drag horizontal do handle de largura — também respeita a escala do slide.
   const onWidthPointerDown = (e) => {
     e.preventDefault()
     e.stopPropagation()
+    let slideW = 1280
+    const slideEl = containerRef.current?.closest('[data-slide-canvas]') || null
+    if (slideEl) slideW = slideEl.getBoundingClientRect().width
+    const scaleFactor = slideW / 1280 || 1
     const startW = text.width ?? ref.current?.offsetWidth ?? 200
-    const startX = e.clientX
-    widthDragRef.current = { startW, startX }
+    widthDragRef.current = { startW, startX: e.clientX, scaleFactor }
     e.target.setPointerCapture(e.pointerId)
   }
   const onWidthPointerMove = (e) => {
     if (!widthDragRef.current) return
-    const next = Math.max(60, Math.min(1200, widthDragRef.current.startW + (e.clientX - widthDragRef.current.startX)))
+    const screenDelta = e.clientX - widthDragRef.current.startX
+    // Converte delta de tela em px reais do slide
+    const realDelta = screenDelta / widthDragRef.current.scaleFactor
+    const next = Math.max(60, Math.min(1200, widthDragRef.current.startW + realDelta))
     onChange({ ...text, width: Math.round(next) })
   }
   const onWidthPointerUp = (e) => {
     widthDragRef.current = null
     try { e.target.releasePointerCapture(e.pointerId) } catch {}
   }
-  const onWidthDoubleClick = () => {
-    // Reset largura pra auto
-    onChange({ ...text, width: null })
-  }
+  const onWidthDoubleClick = () => onChange({ ...text, width: null })
 
   return (
     <motion.div
+      ref={containerRef}
       className="absolute select-none"
       style={{
         left: `${text.x}%`,
         top: `${text.y}%`,
+        x: mvX,
+        y: mvY,
         zIndex: hover ? 35 : 20,
+        transformOrigin: 'top left',
       }}
       drag
       dragMomentum={false}
@@ -80,10 +112,10 @@ export default function FreeText({ text, onChange, onRemove }) {
       onDragEnd={handleDragEnd}
       onHoverStart={() => setHover(true)}
       onHoverEnd={() => setHover(false)}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
     >
-      <div className="relative inline-block">
+      <div className="relative inline-block" style={{ transformOrigin: 'top left' }}>
         <div
           ref={ref}
           contentEditable
@@ -113,7 +145,7 @@ export default function FreeText({ text, onChange, onRemove }) {
         {/* Toolbar edit-only */}
         {hover && (
           <div
-            className="edit-only absolute -top-7 left-0 flex items-center gap-0.5 bg-wine text-cream rounded-full px-1 py-0.5 shadow-md z-50"
+            className="edit-only absolute -top-7 left-0 flex items-center gap-0.5 bg-wine text-cream rounded-full px-1 py-0.5 shadow-md z-50 whitespace-nowrap"
             contentEditable={false}
           >
             <span className="px-1 py-0.5 flex items-center gap-1 text-[10px] cursor-grab">
@@ -143,7 +175,7 @@ export default function FreeText({ text, onChange, onRemove }) {
                 onChange({ ...text, align: next })
               }}
               className="px-1.5 py-0.5 hover:bg-wine-700 rounded text-[9px] uppercase tracking-wider font-semibold"
-              title="Alinhamento do texto"
+              title="Alinhamento"
             >
               <AlignJustify size={10} className="inline mr-0.5" />
               {align}
@@ -154,14 +186,14 @@ export default function FreeText({ text, onChange, onRemove }) {
               value={text.color || '#1A1A1A'}
               onChange={(e) => onChange({ ...text, color: e.target.value })}
               className="w-4 h-4 rounded cursor-pointer border border-cream/30"
-              title="Cor do texto"
+              title="Cor"
             />
             <span className="w-px h-3 bg-cream/30" />
             <button
               type="button"
               onClick={onRemove}
               className="px-1.5 py-0.5 hover:bg-red-700 rounded"
-              title="Remover texto"
+              title="Remover"
             >
               <X size={11} />
             </button>
