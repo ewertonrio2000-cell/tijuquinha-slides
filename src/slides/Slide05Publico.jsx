@@ -40,7 +40,7 @@ export default function Slide05Publico({ slideId }) {
                 className="font-hand text-wine text-xl absolute -top-3 left-1/2 -translate-x-1/2 z-10"
                 style={{ transform: `translateX(-50%) rotate(${i % 2 ? 4 : -4}deg)` }}
               >
-                <EditableText value={p.tag} onChange={(v) => setP(i, { tag: v })}  positionKey={`tag-${i}`}/>
+                <EditableText value={p.tag} onChange={(v) => setP(i, { tag: v })}  positionKey={`tag-${i}`} sizeKey={`tag-${i}`}/>
               </div>
 
               {/* Avatar com moldura branca + leve tilt */}
@@ -67,13 +67,13 @@ export default function Slide05Publico({ slideId }) {
                 value={p.name}
                 onChange={(v) => setP(i, { name: v })}
                 className="font-display text-2xl uppercase tracking-wide text-ink mt-2 leading-none"
-               positionKey="name-2"/>
+               positionKey="name-2" sizeKey="name-2"/>
               <div className="text-[10px] uppercase tracking-[0.25em] text-wine">
-                <EditableText value={p.age} onChange={(v) => setP(i, { age: v })}  positionKey="age-3"/>
+                <EditableText value={p.age} onChange={(v) => setP(i, { age: v })}  positionKey="age-3" sizeKey="age-3"/>
               </div>
               <div className="bg-wine" style={{ width: 24, height: 2 }} />
               <div className="text-[12px] text-muted leading-relaxed mt-1 px-2">
-                <EditableText value={p.needs} onChange={(v) => setP(i, { needs: v })} multiline  positionKey="needs-4"/>
+                <EditableText value={p.needs} onChange={(v) => setP(i, { needs: v })} multiline  positionKey="needs-4" sizeKey="needs-4"/>
               </div>
             </motion.div>
           </StaggerItem>

@@ -35,7 +35,7 @@ export default function Slide10Recorte({ slideId }) {
             width={680}
             height={440}
             delay={0.2}
-          />
+           sizeKey="image"/>
           <SketchMark
             type="arrow-zigzag"
             className="absolute -bottom-2 left-12"
@@ -58,14 +58,14 @@ export default function Slide10Recorte({ slideId }) {
           transition={{ delay: 0.3 }}
         >
           <div className="text-[13px] text-muted leading-relaxed">
-            <EditableText value={d.description} onChange={(v) => set({ description: v })} multiline  positionKey="description"/>
+            <EditableText value={d.description} onChange={(v) => set({ description: v })} multiline  positionKey="description" sizeKey="description"/>
           </div>
           <div className="border-t border-line pt-3 space-y-1">
             <div className="font-hand text-wine text-2xl leading-tight">
-              <EditableText value={d.scale} onChange={(v) => set({ scale: v })}  positionKey="scale"/>
+              <EditableText value={d.scale} onChange={(v) => set({ scale: v })}  positionKey="scale" sizeKey="scale"/>
             </div>
             <div className="text-[11px] uppercase tracking-[0.3em] text-wine font-semibold">
-              <EditableText value={d.detail} onChange={(v) => set({ detail: v })} multiline  positionKey="detail"/>
+              <EditableText value={d.detail} onChange={(v) => set({ detail: v })} multiline  positionKey="detail" sizeKey="detail"/>
             </div>
           </div>
         </motion.div>

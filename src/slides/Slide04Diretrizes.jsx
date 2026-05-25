@@ -38,7 +38,7 @@ function EditList({ items, onChange }) {
         <StaggerItem key={i} className="group flex items-start gap-3 border-b border-cream/15 pb-2.5">
           <span className="mt-2 inline-block w-1.5 h-1.5 rounded-full bg-cream" />
           <div className="flex-1 text-[14px] text-cream leading-snug">
-            <EditableText value={item} onChange={(v) => update(i, v)}  positionKey="el-1"/>
+            <EditableText value={item} onChange={(v) => update(i, v)}  positionKey="el-1" sizeKey="el-1"/>
           </div>
           <button
             onClick={() => remove(i)}

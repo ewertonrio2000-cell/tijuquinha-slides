@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
-import { Plus, Minus } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 import { useSize } from './SizeContext'
 import Draggable from './Draggable'
+import ResizeCorner from './ResizeCorner'
 
 /**
  * Texto editável inline via contentEditable.
- * - Suporta `sizeKey` que persiste um multiplicador de tamanho via SizeContext.
- * - Quando `sizeKey` está presente, mostra A+/A- no hover (edit mode).
+ * - Suporta `sizeKey`: handle persistente no canto para redimensionar fonte
+ * - Suporta `positionKey`: wraps em Draggable para reposicionar
  */
 export default function EditableText({
   value,
@@ -20,8 +20,7 @@ export default function EditableText({
 }) {
   const ref = useRef(null)
   const focusedRef = useRef(false)
-  const [hover, setHover] = useState(false)
-  const [size, setSizeDelta] = useSize(sizeKey, 1)
+  const [size, , setSizeAbs] = useSize(sizeKey, 1)
 
   useEffect(() => {
     if (!ref.current) return
@@ -34,7 +33,6 @@ export default function EditableText({
   const handleInput = (e) => {
     onChange?.(e.currentTarget.innerText)
   }
-
   const handleKeyDown = (e) => {
     if (!multiline && e.key === 'Enter') {
       e.preventDefault()
@@ -42,14 +40,8 @@ export default function EditableText({
     }
   }
 
-  const showControls = sizeKey && setSizeDelta && hover
-
   const content = (
-    <span
-      className="relative inline-block w-full"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
+    <span className="relative inline-block w-full">
       <Tag
         ref={ref}
         contentEditable
@@ -69,35 +61,12 @@ export default function EditableText({
         {value || ''}
       </Tag>
 
-      {showControls && (
-        <span
-          className="edit-only absolute -top-7 right-0 flex items-center gap-0.5 bg-wine text-cream rounded-full px-1 py-0.5 shadow-md z-30 select-none"
-          contentEditable={false}
-        >
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              setSizeDelta(-0.1)
-            }}
-            className="px-1 hover:bg-wine-700 rounded-full"
-            title="Diminuir fonte"
-          >
-            <Minus size={11} />
-          </button>
-          <span className="text-[10px] font-mono px-1 tabular-nums">{size.toFixed(1)}×</span>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              setSizeDelta(0.1)
-            }}
-            className="px-1 hover:bg-wine-700 rounded-full"
-            title="Aumentar fonte"
-          >
-            <Plus size={11} />
-          </button>
-        </span>
+      {sizeKey && setSizeAbs && (
+        <ResizeCorner
+          value={size}
+          onChange={setSizeAbs}
+          tooltip="Arraste para redimensionar a fonte"
+        />
       )}
     </span>
   )

@@ -29,7 +29,7 @@ export default function Slide09Mapa({ slideId }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <EditableText value={d.legend} onChange={(v) => set({ legend: v })} multiline  positionKey="legend"/>
+          <EditableText value={d.legend} onChange={(v) => set({ legend: v })} multiline  positionKey="legend" sizeKey="legend"/>
         </motion.div>
       </div>
 

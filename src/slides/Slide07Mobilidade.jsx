@@ -62,7 +62,7 @@ export default function Slide07Mobilidade({ slideId }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <EditableText value={d.text} onChange={(v) => set({ text: v })} multiline  positionKey="text"/>
+            <EditableText value={d.text} onChange={(v) => set({ text: v })} multiline  positionKey="text" sizeKey="text"/>
           </motion.div>
 
           <Stagger className="flex flex-col gap-2 mt-2" gap={0.07} delay={0.3}>
@@ -82,7 +82,7 @@ export default function Slide07Mobilidade({ slideId }) {
                       <Icon size={14} strokeWidth={1.8} />
                     </span>
                     <div className="flex-1 text-[13px] text-ink">
-                      <EditableText value={it.label} onChange={(v) => setItem(i, { label: v })} multiline  positionKey={`label-${i}`}/>
+                      <EditableText value={it.label} onChange={(v) => setItem(i, { label: v })} multiline  positionKey={`label-${i}`} sizeKey={`label-${i}`}/>
                     </div>
                     <button
                       onClick={() => remove(i)}
@@ -110,7 +110,7 @@ export default function Slide07Mobilidade({ slideId }) {
             height={400}
             caption="diagrama de mobilidade"
             delay={0.3}
-           positionKey="image"/>
+           positionKey="image" sizeKey="image"/>
         </div>
       </div>
 

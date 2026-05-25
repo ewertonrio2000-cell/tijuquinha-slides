@@ -26,7 +26,16 @@ export function SizeProvider({
     (key, delta) => {
       if (!onSizesChange) return
       const current = sizes?.[key] ?? 1
-      const next = Math.max(0.5, Math.min(3, +(current + delta).toFixed(2)))
+      const next = Math.max(0.3, Math.min(4, +(current + delta).toFixed(2)))
+      onSizesChange({ ...sizes, [key]: next })
+    },
+    [sizes, onSizesChange],
+  )
+
+  const setSizeAbsolute = useCallback(
+    (key, value) => {
+      if (!onSizesChange) return
+      const next = Math.max(0.3, Math.min(4, +value.toFixed(2)))
       onSizesChange({ ...sizes, [key]: next })
     },
     [sizes, onSizesChange],
@@ -51,16 +60,20 @@ export function SizeProvider({
   )
 
   const value = useMemo(
-    () => ({ sizes, setSize, positions, setPosition, resetPosition }),
-    [sizes, setSize, positions, setPosition, resetPosition],
+    () => ({ sizes, setSize, setSizeAbsolute, positions, setPosition, resetPosition }),
+    [sizes, setSize, setSizeAbsolute, positions, setPosition, resetPosition],
   )
   return <SizeCtx.Provider value={value}>{children}</SizeCtx.Provider>
 }
 
 export function useSize(key, defaultMult = 1) {
-  const { sizes, setSize } = useContext(SizeCtx)
-  if (!key) return [defaultMult, null]
-  return [sizes?.[key] ?? defaultMult, (delta) => setSize(key, delta)]
+  const { sizes, setSize, setSizeAbsolute } = useContext(SizeCtx)
+  if (!key) return [defaultMult, null, null]
+  return [
+    sizes?.[key] ?? defaultMult,
+    (delta) => setSize(key, delta),
+    (val) => setSizeAbsolute(key, val),
+  ]
 }
 
 export function usePosition(key) {

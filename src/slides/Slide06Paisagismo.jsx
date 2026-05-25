@@ -45,10 +45,10 @@ export default function Slide06Paisagismo({ slideId }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <EditableText value={d.text} onChange={(v) => set({ text: v })} multiline  positionKey="text"/>
+            <EditableText value={d.text} onChange={(v) => set({ text: v })} multiline  positionKey="text" sizeKey="text"/>
           </motion.div>
           <div className="text-[11px] text-wine/70 leading-relaxed border-t border-line pt-3 mt-3 font-hand text-base text-wine">
-            <EditableText value={d.legend} onChange={(v) => set({ legend: v })} multiline  positionKey="legend"/>
+            <EditableText value={d.legend} onChange={(v) => set({ legend: v })} multiline  positionKey="legend" sizeKey="legend"/>
           </div>
         </div>
 
@@ -66,7 +66,7 @@ export default function Slide06Paisagismo({ slideId }) {
               delay={0.2}
               positionKey="antes"
               zIndex={1}
-            />
+             sizeKey="imageBefore"/>
           </div>
           <div className="absolute" style={{ right: '5%', top: '20%' }}>
             <Polaroid
@@ -79,7 +79,7 @@ export default function Slide06Paisagismo({ slideId }) {
               delay={0.35}
               positionKey="depois"
               zIndex={2}
-            />
+             sizeKey="imageAfter"/>
           </div>
         </div>
       </div>

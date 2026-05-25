@@ -41,7 +41,7 @@ export default function Slide12Desenho({ slideId }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <EditableText value={d.legend} onChange={(v) => set({ legend: v })} multiline  positionKey="legend"/>
+          <EditableText value={d.legend} onChange={(v) => set({ legend: v })} multiline  positionKey="legend" sizeKey="legend"/>
         </motion.div>
       </div>
       <div className="flex-1 min-h-0 flex items-center justify-center relative">
@@ -54,7 +54,7 @@ export default function Slide12Desenho({ slideId }) {
           height={460}
           delay={0.2}
           positionKey="hero"
-        />
+         sizeKey="image"/>
       </div>
 
       {(d.callouts || []).map((c, i) => (

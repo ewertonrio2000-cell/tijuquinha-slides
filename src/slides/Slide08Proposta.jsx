@@ -44,7 +44,7 @@ export default function Slide08Proposta({ slideId }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
           >
-            <EditableText value={d.intro} onChange={(v) => set({ intro: v })} multiline  positionKey="intro"/>
+            <EditableText value={d.intro} onChange={(v) => set({ intro: v })} multiline  positionKey="intro" sizeKey="intro"/>
           </motion.div>
 
           <Stagger className="grid grid-cols-2 gap-3 flex-1 min-h-0" gap={0.1} delay={0.2}>
@@ -66,14 +66,14 @@ export default function Slide08Proposta({ slideId }) {
                       value={a.title}
                       onChange={(v) => setAxis(i, { title: v })}
                       className="font-display text-2xl uppercase tracking-wide text-ink leading-none"
-                     positionKey={`title-${i}`}/>
+                     positionKey={`title-${i}`} sizeKey={`title-${i}`}/>
                     <div className="bg-wine" style={{ width: 24, height: 2 }} />
                     <div className="text-[12px] text-muted leading-relaxed mt-1">
                       <EditableText
                         value={a.text}
                         onChange={(v) => setAxis(i, { text: v })}
                         multiline
-                       positionKey="text-3"/>
+                       positionKey="text-3" sizeKey="text-3"/>
                     </div>
                   </motion.div>
                 </StaggerItem>

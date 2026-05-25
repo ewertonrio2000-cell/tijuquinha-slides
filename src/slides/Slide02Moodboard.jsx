@@ -58,7 +58,7 @@ export default function Slide02Moodboard({ slideId }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <EditableText value={d.caption} onChange={(v) => set({ caption: v })} multiline  positionKey="caption"/>
+          <EditableText value={d.caption} onChange={(v) => set({ caption: v })} multiline  positionKey="caption" sizeKey="caption"/>
         </motion.div>
       </div>
 
