@@ -4,6 +4,7 @@ import Polaroid from '../components/Polaroid'
 import SlideTitle from '../components/SlideTitle'
 import { Stagger, StaggerItem } from '../components/Stagger'
 import { SizeProvider } from '../components/SizeContext'
+import FreeTextLayer from '../components/FreeTextLayer'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -20,6 +21,7 @@ const defaults = {
   image2: null,
   sizes: {},
   positions: {},
+  freeTexts: [],
 }
 
 function StickyQuote({ value, onChange, rotation = -2, delay = 0 }) {
@@ -110,6 +112,7 @@ export default function Slide1_1Diagnostico({ slideId }) {
         </div>
       </div>
     </div>
+      <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
     </SizeProvider>
   )
 }

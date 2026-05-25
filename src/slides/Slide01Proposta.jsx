@@ -4,6 +4,7 @@ import Polaroid from '../components/Polaroid'
 import SlideTitle from '../components/SlideTitle'
 import SketchMark from '../components/SketchMark'
 import { SizeProvider } from '../components/SizeContext'
+import FreeTextLayer from '../components/FreeTextLayer'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -15,6 +16,7 @@ const defaults = {
   image: null,
   sizes: {},
   positions: {},
+  freeTexts: [],
 }
 
 export default function Slide01Proposta({ slideId }) {
@@ -77,6 +79,7 @@ export default function Slide01Proposta({ slideId }) {
           />
         </div>
       </div>
+      <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
     </SizeProvider>
   )
 }

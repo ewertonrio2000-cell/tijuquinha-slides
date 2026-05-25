@@ -6,6 +6,7 @@ import Callout from '../components/Callout'
 import ColorSwatch from '../components/ColorSwatch'
 import SlideTitle from '../components/SlideTitle'
 import { SizeProvider } from '../components/SizeContext'
+import FreeTextLayer from '../components/FreeTextLayer'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -27,6 +28,7 @@ const defaults = {
   palette: ['#4F5B45', '#A85F47', '#C77E5A', '#D9CCB4'],
   sizes: {},
   positions: {},
+  freeTexts: [],
 }
 
 export default function Slide02Moodboard({ slideId }) {
@@ -126,6 +128,7 @@ export default function Slide02Moodboard({ slideId }) {
         <Plus size={12} /> Anotação
       </button>
     </div>
+      <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
     </SizeProvider>
   )
 }

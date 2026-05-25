@@ -4,6 +4,7 @@ import EditableText from '../components/EditableText'
 import SlideTitle from '../components/SlideTitle'
 import { Stagger, StaggerItem } from '../components/Stagger'
 import { SizeProvider } from '../components/SizeContext'
+import FreeTextLayer from '../components/FreeTextLayer'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -25,6 +26,7 @@ const defaults = {
   ],
   sizes: {},
   positions: {},
+  freeTexts: [],
 }
 
 function EditList({ items, onChange }) {
@@ -86,6 +88,7 @@ export default function Slide04Diretrizes({ slideId }) {
         </motion.div>
       </div>
     </div>
+      <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
     </SizeProvider>
   )
 }

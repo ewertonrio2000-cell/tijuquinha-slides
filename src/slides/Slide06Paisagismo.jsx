@@ -5,6 +5,7 @@ import Polaroid from '../components/Polaroid'
 import Callout from '../components/Callout'
 import SlideTitle from '../components/SlideTitle'
 import { SizeProvider } from '../components/SizeContext'
+import FreeTextLayer from '../components/FreeTextLayer'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -21,6 +22,7 @@ const defaults = {
   ],
   sizes: {},
   positions: {},
+  freeTexts: [],
 }
 
 export default function Slide06Paisagismo({ slideId }) {
@@ -105,6 +107,7 @@ export default function Slide06Paisagismo({ slideId }) {
         <Plus size={12} /> Anotação
       </button>
     </div>
+      <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
     </SizeProvider>
   )
 }

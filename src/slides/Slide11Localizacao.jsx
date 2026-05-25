@@ -4,6 +4,7 @@ import EditableText from '../components/EditableText'
 import Polaroid from '../components/Polaroid'
 import SlideTitle from '../components/SlideTitle'
 import { SizeProvider } from '../components/SizeContext'
+import FreeTextLayer from '../components/FreeTextLayer'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -20,6 +21,7 @@ const defaults = {
   ],
   sizes: {},
   positions: {},
+  freeTexts: [],
 }
 
 export default function Slide11Localizacao({ slideId }) {
@@ -82,6 +84,7 @@ export default function Slide11Localizacao({ slideId }) {
         </div>
       </div>
     </div>
+      <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
     </SizeProvider>
   )
 }

@@ -6,6 +6,7 @@ import SlideTitle from '../components/SlideTitle'
 import SketchMark from '../components/SketchMark'
 import { Stagger, StaggerItem } from '../components/Stagger'
 import { SizeProvider } from '../components/SizeContext'
+import FreeTextLayer from '../components/FreeTextLayer'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -22,6 +23,7 @@ const defaults = {
   ],
   sizes: {},
   positions: {},
+  freeTexts: [],
 }
 
 const AXIS_ICONS = [Footprints, Cable, Lightbulb, Bus]
@@ -112,6 +114,7 @@ export default function Slide08Proposta({ slideId }) {
         </div>
       </div>
     </div>
+      <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
     </SizeProvider>
   )
 }

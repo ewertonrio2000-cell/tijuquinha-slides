@@ -3,6 +3,7 @@ import EditableText from '../components/EditableText'
 import ImageUpload from '../components/ImageUpload'
 import SketchMark from '../components/SketchMark'
 import { SizeProvider } from '../components/SizeContext'
+import FreeTextLayer from '../components/FreeTextLayer'
 import { useSlideStorage } from '../hooks/useSlideStorage'
 
 const defaults = {
@@ -19,6 +20,7 @@ const defaults = {
   image: null,
   sizes: {},
   positions: {},
+  freeTexts: [],
 }
 
 export default function Slide00Cover({ slideId }) {
@@ -145,6 +147,7 @@ export default function Slide00Cover({ slideId }) {
         </motion.div>
       </div>
     </div>
+      <FreeTextLayer texts={d.freeTexts} onChange={(freeTexts) => set({ freeTexts })} />
     </SizeProvider>
   )
 }
